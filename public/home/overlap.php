@@ -3,7 +3,7 @@
             <div class="row align-items-center justify-content-center">
 
                 <div class="col-lg-7 position-relative">
-                    <img src="public/images/sambutan2.png" alt="Keluarga H.M Samhudi" class="img-fluid overlap-img">
+                    <img src="images/sambutan2.png" alt="Keluarga H.M Samhudi" class="img-fluid overlap-img">
                     <div class="overlap-ornament"></div>
                 </div>
 

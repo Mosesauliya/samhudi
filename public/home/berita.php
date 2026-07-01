@@ -14,7 +14,7 @@
 
                 <div class="col-lg-6">
                     <div class="news-wrapper">
-                        <img src="public/images/berita/berita1.png" class="img-fluid w-100 news-img-main">
+                        <img src="images/berita/berita1.png" class="img-fluid w-100 news-img-main">
                         <div class="news-overlay"></div>
                         <div class="news-content-main">
                             <h5 class="news-title-main">
@@ -32,7 +32,7 @@
 
                         <div class="col-6">
                             <div class="news-wrapper">
-                                <img src="public/images/berita/berita2.png" class="img-fluid w-100 news-img-grid">
+                                <img src="images/berita/berita2.png" class="img-fluid w-100 news-img-grid">
                                 <div class="news-overlay"></div>
                                 <div class="news-content-grid">
                                     <h6 class="news-title-grid">
@@ -45,7 +45,7 @@
 
                         <div class="col-6">
                             <div class="news-wrapper">
-                                <img src="public/images/berita/berita3.png" class="img-fluid w-100 news-img-grid">
+                                <img src="images/berita/berita3.png" class="img-fluid w-100 news-img-grid">
                                 <div class="news-overlay"></div>
                                 <div class="news-content-grid">
                                     <h6 class="news-title-grid">
@@ -58,7 +58,7 @@
 
                         <div class="col-6">
                             <div class="news-wrapper">
-                                <img src="public/images/berita/berita4.png" class="img-fluid w-100 news-img-grid">
+                                <img src="images/berita/berita4.png" class="img-fluid w-100 news-img-grid">
                                 <div class="news-overlay"></div>
                                 <div class="news-content-grid">
                                     <h6 class="news-title-grid">
@@ -71,7 +71,7 @@
 
                         <div class="col-6">
                             <div class="news-wrapper">
-                                <img src="public/images/berita/berita5.png" class="img-fluid w-100 news-img-grid">
+                                <img src="images/berita/berita5.png" class="img-fluid w-100 news-img-grid">
                                 <div class="news-overlay"></div>
                                 <div class="news-content-grid">
                                     <h6 class="news-title-grid">
