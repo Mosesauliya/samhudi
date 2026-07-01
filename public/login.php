@@ -129,7 +129,7 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
     <div class="absolute top-1/3 right-1/4 w-56 h-56 rounded-full bg-teal-500/10 blur-3xl animate-float-slow"></div>
 
     <div class="absolute top-6 right-6 z-20">
-      <a href="YOUR_URL_HERE"
+      <a href="index"
          class="group inline-flex items-center gap-2 text-sand-100/60 hover:text-sand-100 text-sm font-medium transition-colors duration-200">
         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-white/20 bg-white/5 group-hover:bg-white/10 transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
