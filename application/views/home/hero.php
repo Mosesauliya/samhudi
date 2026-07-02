@@ -3,9 +3,6 @@
 
             <div class="position-absolute top-0 start-0 w-100 h-100 hero-overlay"></div>
 
-            <button id="menuBtn" onclick="openMenu()" class="btn-menu">
-                ☰
-            </button>
 
             <div class="position-relative text-white">
                 <h1 class="display-2 fw-light">

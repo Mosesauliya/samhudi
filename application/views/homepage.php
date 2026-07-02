@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -287,14 +287,13 @@
         <div class="container">
             <div class="row align-items-center justify-content-center g-4">
 
-                <!-- IMAGE -->
+               
                 <div class="col-12 col-lg-7 position-relative text-center">
 
                     <img src="assets/sambutan2.png" alt="Keluarga H.M Samhudi"
                         class="img-fluid w-100"
                         style="object-fit:cover;">
 
-                    <!-- dekorasi titik (hide di mobile pakai d-none d-lg-block) -->
                     <div class="d-none d-lg-block"
                         style="position:absolute; left:-20px; top:50%; transform:translateY(-50%);
                     width:60px; height:180px;
@@ -304,7 +303,6 @@
 
                 </div>
 
-                <!-- TEXT -->
                 <div class="col-12 col-lg-5">
 
                     <div class="bg-white shadow p-4 p-lg-5 mx-auto"
@@ -608,4 +606,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-</html>
+</html> -->
