@@ -17,7 +17,7 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masuk — Keluarga H.M Samhudi</title>
+<title>Masuk / Daftar | Keluarga H.M Samhudi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -33,6 +33,7 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
             800: '#374D49',
             700: '#445E59',
             600: '#536E6A',
+						500: '#788F8B',
           },
           gold: {
             400: '#D4B571',
@@ -93,6 +94,15 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
 
   /* Checkbox */
   input[type="checkbox"] { accent-color: #D4B571; }
+
+  /* Password mismatch state */
+  .input-line.input-error { border-bottom-color: #f87171; }
+
+  /* Custom slim scrollbar buat panel form kanan */
+  .form-scroll::-webkit-scrollbar { width: 6px; }
+  .form-scroll::-webkit-scrollbar-track { background: transparent; }
+  .form-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 999px; }
+  .form-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
 </style>
 </head>
 <body class="h-screen overflow-hidden bg-teal-900 font-body">
@@ -103,19 +113,12 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
     <div class="relative hidden md:block h-full overflow-hidden">
 
       <!-- Swap btn "Sign up / Login" — gaya outline pill di atas foto -->
-      <div class="absolute bottom-10 left-10 z-30">
+      <div class="absolute inset-0 z-30 flex items-center justify-center">
         <!-- shown when mode=login → prompt to sign up -->
         <div data-hero="login" data-hidden="<?= $mode === 'login' ? 'false' : 'true' ?>" class="swap-panel">
           <button type="button" data-tab-target="signup"
                   class="tab-toggle inline-flex items-center gap-2 border border-white text-white rounded-full px-7 py-2.5 text-sm font-semibold tracking-wide hover:bg-white hover:text-teal-900 transition-all duration-300">
-            Daftar Sekarang
-          </button>
-        </div>
-        <!-- shown when mode=signup → prompt to log in -->
-        <div data-hero="signup" data-hidden="<?= $mode === 'signup' ? 'false' : 'true' ?>" class="swap-panel">
-          <button type="button" data-tab-target="login"
-                  class="tab-toggle inline-flex items-center gap-2 border border-white text-white rounded-full px-7 py-2.5 text-sm font-semibold tracking-wide hover:bg-white hover:text-teal-900 transition-all duration-300">
-            Masuk Sekarang
+            Sign Up
           </button>
         </div>
       </div>
@@ -133,7 +136,8 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
     </div>
 
     <!-- ============ RIGHT: FORM PANEL ============ -->
-    <div class="relative flex flex-col justify-center px-10 sm:px-14 md:px-16 lg:px-20 h-full bg-teal-800">
+    <!-- FIX: overflow-y-auto + form-scroll biar konten ga kepotong kalau viewport pendek -->
+    <div class="form-scroll relative flex flex-col justify-center px-10 sm:px-14 md:px-16 lg:px-20 h-full bg-teal-800 overflow-y-auto py-12">
 
       <!-- Back button -->
       <a href="<?= base_url('index.php') ?>"
@@ -144,11 +148,12 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
         Kembali
       </a>
 
-      <div class="w-full max-w-sm mx-auto">
+      <!-- FIX: max-w-sm -> max-w-md biar signup (4 field) ga kerasa sempit horizontal -->
+      <div class="w-full max-w-md mx-auto">
 
         <!-- Error flash -->
         <?php if (!empty($errors)): ?>
-          <div class="mb-6 text-red-300 text-sm space-y-1">
+          <div class="mb-6 text-red-300 text-sm space-y-1 swap-panel" data-panel="<?= $mode ?>" data-hidden="false">
             <?php foreach ($errors as $err): ?>
               <p>• <?= htmlspecialchars($err) ?></p>
             <?php endforeach; ?>
@@ -157,7 +162,7 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
 
         <!-- -------- LOGIN FORM -------- -->
         <form id="form-login" data-panel="login" data-hidden="<?= $mode === 'login' ? 'false' : 'true' ?>"
-              class="swap-panel" action="auth/login.php" method="POST" autocomplete="on">
+              class="swap-panel" action="<?= base_url('auth/login') ?>" method="POST" autocomplete="on">
 
           <h1 class="font-display text-white text-3xl font-semibold mb-10 tracking-tight">Log In</h1>
 
@@ -169,7 +174,7 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
               </label>
               <input id="login-email" name="identifier" type="text" required
                      value="<?= htmlspecialchars($old['identifier'] ?? '') ?>"
-                     placeholder="nama@email.com"
+                     placeholder="example@email.com"
                      class="input-line">
             </div>
 
@@ -203,28 +208,29 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
 
             <!-- mobile only swap -->
             <p class="text-center text-white/50 text-sm md:hidden">
-              Belum punya akun?
-              <button type="button" data-tab-target="signup" class="tab-toggle text-gold-400 font-semibold">Daftar</button>
+              Don't have an account?
+              <button type="button" data-tab-target="signup" class="tab-toggle text-gold-400 font-semibold">Sign Up</button>
             </p>
           </div>
 
         </form>
 
         <!-- -------- SIGN UP FORM -------- -->
+        <!-- FIX: heading mb-10->mb-8, field wrapper space-y-8->space-y-5 -->
         <form id="form-signup" data-panel="signup" data-hidden="<?= $mode === 'signup' ? 'false' : 'true' ?>"
-              class="swap-panel" action="auth/register.php" method="POST" autocomplete="on">
+              class="swap-panel" action="<?= base_url('auth/register') ?>" method="POST" autocomplete="on">
 
-          <h1 class="font-display text-white text-3xl font-semibold mb-10 tracking-tight">Sign Up</h1>
+          <h1 class="font-display text-white text-3xl font-semibold mb-8 tracking-tight">Create Account</h1>
 
-          <div class="space-y-8">
+          <div class="space-y-5">
 
             <div>
               <label for="signup-name" class="block text-white/60 text-xs font-medium mb-2 tracking-wide uppercase">
-                Nama Lengkap <span class="text-red-400">*</span>
+                Full Name <span class="text-red-400">*</span>
               </label>
               <input id="signup-name" name="full_name" type="text" required
                      value="<?= htmlspecialchars($old['full_name'] ?? '') ?>"
-                     placeholder="Sesuai KTP"
+                     placeholder="Lorem Ipsum"
                      class="input-line">
             </div>
 
@@ -234,7 +240,7 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
               </label>
               <input id="signup-email" name="email" type="email" required
                      value="<?= htmlspecialchars($old['email'] ?? '') ?>"
-                     placeholder="nama@email.com"
+                     placeholder="example@email.com"
                      class="input-line">
             </div>
 
@@ -243,30 +249,40 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
                 Password <span class="text-red-400">*</span>
               </label>
               <input id="signup-password" name="password" type="password" required minlength="8"
-                     placeholder="Minimal 8 karakter"
+                     placeholder="Min. 8 characters"
                      class="input-line">
+            </div>
+
+            <div>
+              <label for="signup-password-confirm" class="block text-white/60 text-xs font-medium mb-2 tracking-wide uppercase">
+                Confirm Password <span class="text-red-400">*</span>
+              </label>
+              <input id="signup-password-confirm" name="password_confirmation" type="password" required minlength="8"
+                     placeholder="Re-enter password"
+                     class="input-line">
+              <p id="signup-password-error" class="hidden text-red-300 text-xs mt-1.5">Password tidak sama, cek lagi ya</p>
             </div>
 
           </div>
 
-          <div class="flex items-start gap-2 mt-6">
+          <div class="flex items-start gap-2 mt-5">
             <input type="checkbox" id="agree" name="agree" required class="w-3.5 h-3.5 mt-0.5">
             <label for="agree" class="text-white/60 text-sm select-none cursor-pointer leading-snug">
-              Saya menyetujui <a href="#" class="text-gold-400 hover:text-gold-500 underline">Ketentuan &amp; Privasi</a>
+              I agree to the <a href="#" class="text-teal-500 hover:text-gold-500 underline">Terms &amp; Conditions</a>
             </label>
           </div>
 
-          <div class="mt-8 space-y-4">
+          <div class="mt-6 space-y-4">
             <button type="submit"
                     class="w-full border border-white/70 text-white font-display font-semibold tracking-widest text-sm uppercase rounded-full py-3.5 hover:bg-white hover:text-teal-900 transition-all duration-300">
-              DAFTAR
+              Sign Up
             </button>
 
             <!-- mobile only swap -->
-            <p class="text-center text-white/50 text-sm md:hidden">
-              Sudah punya akun?
-              <button type="button" data-tab-target="login" class="tab-toggle text-gold-400 font-semibold">Masuk</button>
-            </p>
+            <p class="text-center text-white/50 text-sm">
+							Already have an account?
+							<button type="button" data-tab-target="login" class="tab-toggle text-teal-500 hover:text-gold-500 underline font-semibold">Log In</button>
+						</p>
           </div>
 
         </form>
@@ -294,6 +310,31 @@ $mode = isset($_GET['mode']) && $_GET['mode'] === 'signup' ? 'signup' : 'login';
       setMode(el.getAttribute('data-tab-target'));
     });
   });
+
+  // Confirm password validation
+  (function() {
+    var pw = document.getElementById('signup-password');
+    var pwConfirm = document.getElementById('signup-password-confirm');
+    var pwError = document.getElementById('signup-password-error');
+    var signupForm = document.getElementById('form-signup');
+
+    function checkMatch() {
+      var match = pw.value === pwConfirm.value;
+      pwConfirm.classList.toggle('input-error', !match && pwConfirm.value.length > 0);
+      pwError.classList.toggle('hidden', match || pwConfirm.value.length === 0);
+      return match;
+    }
+
+    pw.addEventListener('input', checkMatch);
+    pwConfirm.addEventListener('input', checkMatch);
+
+    signupForm.addEventListener('submit', function(e) {
+      if (!checkMatch()) {
+        e.preventDefault();
+        pwConfirm.focus();
+      }
+    });
+  })();
 </script>
 </body>
 </html>
