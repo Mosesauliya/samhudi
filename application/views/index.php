@@ -3,18 +3,18 @@
 //Load Header & Layout Global Atas
 // include 'layout/header.php';
 // include 'layout/sidebar.php';
-include 'partials/navbar.php';
+// include 'partials/navbar.php';
 
-//Load Konten Spesifik Halaman (Home)
-include 'home/hero.php';
-include 'home/sambutan.php';
-include 'home/carousel.php';
-include 'home/overlap.php';
-include 'home/berita.php';
+// //Load Konten Spesifik Halaman (Home)
+// include 'home/hero.php';
+// include 'home/sambutan.php';
+// include 'home/carousel.php';
+// include 'home/overlap.php';
+// include 'home/berita.php';
 
-//Load Footer & Script 
-include 'layout/footer.php';
-?>
+// //Load Footer & Script 
+// include 'layout/footer.php';
+// ?>
 
 <!-- <!DOCTYPE html>
 <html lang="id">

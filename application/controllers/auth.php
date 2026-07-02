@@ -75,7 +75,11 @@ class Auth extends CI_Controller
             // opsional: set cookie remember-me token kalau lo mau dikembangin lagi
         }
 
-        redirect('homepage'); // ganti sesuai halaman utama lo
+        if (in_array($user->role, ['admin', 'super_admin'])) {
+            redirect('admin');
+        } else {
+            redirect('/');
+        }
     }
 
     private function _fail_login($errors)
@@ -151,7 +155,11 @@ class Auth extends CI_Controller
                 'logged_in' => TRUE,
             ]);
 
-            redirect('homepage');
+            if (in_array($user->role, ['admin', 'super_admin'])) {
+                redirect('admin');
+            } else {
+                redirect('/');
+            }
             return;
         }
 
