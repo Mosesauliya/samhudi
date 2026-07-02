@@ -29,7 +29,7 @@
                 <li><a href="#diskusi" class="nav-link-custom">Forum Diskusi</a></li>
             </ul>
             <div class="d-flex align-items-center">
-                <a href="#" class="d-none d-md-inline-block style-btn-masuk">Masuk</a>
+                <a href="javascript:void(0)" class="d-none d-md-inline-block style-btn-masuk">Masuk</a>
                 <button id="menuBtn" onclick="openMenu()" class="d-inline-block d-md-none" style="background: none; border: none; color: #1B3835; font-size: 32px; cursor: pointer; padding: 0; transition: opacity 0.3s;">☰</button>
             </div>
         </div>
@@ -44,7 +44,7 @@
             <a href="#data_keluarga" class="sidebar-link-custom">Data Keluarga</a>
             <a href="#diskusi" class="sidebar-link-custom">Forum Diskusi</a>
             <hr style="border-color: rgba(255,255,255,0.2); margin: 25px 0;">
-            <a href="#" class="sidebar-link-custom" style="background: rgba(255,255,255,0.1); text-align: center; padding: 10px; border-radius: 50px; margin-bottom: 0;">Masuk</a>
+            <a href="javascript:void(0)" class="d-none d-md-inline-block style-btn-masuk">Masuk</a>
         </div>
     </div>
 
