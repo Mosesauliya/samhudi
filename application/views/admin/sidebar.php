@@ -41,14 +41,14 @@ $current_page = isset($active_menu) ? $active_menu : ($this->uri->segment(2) ? $
         </a>
 
         <!-- Kelola Forum Diskusi -->
-        <a href="#" 
+        <a href="<?= base_url('admin/forum') ?>" 
            class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-sm font-medium transition-all <?= ($current_page == 'forum') ? 'bg-gradient-to-r from-brand-medium to-brand-dark/20 text-white border-l-4 border-white shadow-md' : 'text-white/80 hover:text-white hover:bg-brand-medium/20' ?>">
             <i class="bi bi-chat-left-text text-lg"></i>
             <span>Kelola Forum Diskusi</span>
         </a>
 
         <!-- Kelola Berita -->
-        <a href="#" 
+        <a href="<?= base_url('admin/berita') ?>" 
            class="flex items-center gap-3.5 px-4 py-3 rounded-lg text-sm font-medium transition-all <?= ($current_page == 'berita') ? 'bg-gradient-to-r from-brand-medium to-brand-dark/20 text-white border-l-4 border-white shadow-md' : 'text-white/80 hover:text-white hover:bg-brand-medium/20' ?>">
             <i class="bi bi-newspaper text-lg"></i>
             <span>Kelola Berita</span>

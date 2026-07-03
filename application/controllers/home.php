@@ -20,13 +20,10 @@ class Home extends CI_Controller {
             ['img' => 'family7.png', 'label' => 'Keluarga (g)', 'rot' => -4],
         ];
 
-        // Data untuk berita
-        $data['news_items'] = [
-            ['img' => 'berita2.png', 'title' => 'SILATURAHMI KELUARGA HM SAMHUDI 2024'],
-            ['img' => 'berita3.png', 'title' => 'SILATURAHMI KELUARGA BESAR'],
-            ['img' => 'berita4.png', 'title' => 'Video Pembersihan Lahan'],
-            ['img' => 'berita5.png', 'title' => 'Rencana pemanfaatan tanah Cianjur'],
-        ];
+        // Ambil berita dari database (status publish, urutkan terbaru, maksimal 5 untuk layout grid)
+        $this->db->order_by('created_at', 'DESC');
+        $this->db->limit(5);
+        $data['news_items'] = $this->db->get_where('news', ['status' => 'publish'])->result_array();
 
         $this->load->view('templates/header');
         $this->load->view('partials/navbar');
@@ -37,4 +34,4 @@ class Home extends CI_Controller {
         $this->load->view('home/berita', ['news_items' => $data['news_items']]);
         $this->load->view('templates/footer');
     }
-}
+}

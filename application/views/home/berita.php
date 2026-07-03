@@ -1,3 +1,4 @@
+<?php if (!empty($news_items)): ?>
 <section class="py-5 berita-section">
     <div class="container">
 
@@ -11,80 +12,53 @@
         </div>
 
         <div class="row g-3">
-
+            <?php
+            $main_news = $news_items[0];
+            $other_news = array_slice($news_items, 1);
+            ?>
             <div class="col-lg-6">
-                <div class="news-wrapper">
-                    <img src="<?php echo base_url('assets/images/berita/berita1.png'); ?>" class="img-fluid w-100 news-img-main">
+                <div class="news-wrapper h-100">
+                    <img src="<?php echo !empty($main_news['thumbnail']) && file_exists('./' . $main_news['thumbnail']) ? base_url($main_news['thumbnail']) : base_url('assets/images/berita/berita1.png'); ?>" class="img-fluid w-100 news-img-main" style="object-fit: cover; height: 100%; min-height: 400px;">
                     <div class="news-overlay"></div>
                     <div class="news-content-main">
                         <h5 class="news-title-main">
-                            Assalamu'alaikum Warahmatullahi Wabarakatuh Para warga Keluarga...
+                            <?php echo htmlspecialchars($main_news['title']); ?>
                         </h5>
-                        <a href="#" class="news-link-main">
-                            BACA SELENGKAPNYA →
-                        </a>
+                        <?php if (!empty($main_news['external_link'])): ?>
+                            <a href="<?php echo htmlspecialchars($main_news['external_link']); ?>" target="_blank" class="news-link-main" style="text-decoration:none;">
+                                BACA SELENGKAPNYA →
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
 
+            <?php if (!empty($other_news)): ?>
             <div class="col-lg-6">
-                <div class="row g-3">
-
+                <div class="row g-3 h-100">
+                    <?php foreach ($other_news as $news): ?>
                     <div class="col-6">
-                        <div class="news-wrapper">
-                            <img src="<?php echo base_url('assets/images/berita/berita2.png'); ?>" class="img-fluid w-100 news-img-grid">
+                        <div class="news-wrapper h-100">
+                            <img src="<?php echo !empty($news['thumbnail']) && file_exists('./' . $news['thumbnail']) ? base_url($news['thumbnail']) : base_url('assets/images/berita/berita2.png'); ?>" class="img-fluid w-100 news-img-grid" style="object-fit: cover; height: 100%; min-height: 190px;">
                             <div class="news-overlay"></div>
                             <div class="news-content-grid">
                                 <h6 class="news-title-grid">
-                                    SILATURAHMI KELUARGA HM SAMHUDI 2024
+                                    <?php echo htmlspecialchars($news['title']); ?>
                                 </h6>
-                                <small class="news-link-grid">BACA SELENGKAPNYA</small>
+                                <?php if (!empty($news['external_link'])): ?>
+                                    <a href="<?php echo htmlspecialchars($news['external_link']); ?>" target="_blank" style="text-decoration:none;">
+                                        <small class="news-link-grid text-white">BACA SELENGKAPNYA</small>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-6">
-                        <div class="news-wrapper">
-                            <img src="<?php echo base_url('assets/images/berita/berita3.png'); ?>" class="img-fluid w-100 news-img-grid">
-                            <div class="news-overlay"></div>
-                            <div class="news-content-grid">
-                                <h6 class="news-title-grid">
-                                    SILATURAHMI KELUARGA BESAR
-                                </h6>
-                                <small class="news-link-grid">BACA SELENGKAPNYA</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-6">
-                        <div class="news-wrapper">
-                            <img src="<?php echo base_url('assets/images/berita/berita4.png'); ?>" class="img-fluid w-100 news-img-grid">
-                            <div class="news-overlay"></div>
-                            <div class="news-content-grid">
-                                <h6 class="news-title-grid">
-                                    Video Pembersihan Lahan
-                                </h6>
-                                <small class="news-link-grid">BACA SELENGKAPNYA</small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-6">
-                        <div class="news-wrapper">
-                            <img src="<?php echo base_url('assets/images/berita/berita5.png'); ?>" class="img-fluid w-100 news-img-grid">
-                            <div class="news-overlay"></div>
-                            <div class="news-content-grid">
-                                <h6 class="news-title-grid">
-                                    Rencana pemanfaatan tanah Cianjur
-                                </h6>
-                                <small class="news-link-grid">BACA SELENGKAPNYA</small>
-                            </div>
-                        </div>
-                    </div>
-
+                    <?php endforeach; ?>
                 </div>
             </div>
+            <?php endif; ?>
 
         </div>
     </div>
 </section>
+<?php endif; ?>

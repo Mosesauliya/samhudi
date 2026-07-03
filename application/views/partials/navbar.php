@@ -38,21 +38,10 @@
             </li>
         </ul>
 
-        <div class="flex items-center gap-3">
-            <?php if ($this->session->userdata('logged_in')): ?>
-                <?php if (in_array($this->session->userdata('role'), ['admin', 'super_admin'])): ?>
-                    <a href="<?= base_url('admin') ?>" class="font-display font-semibold text-sm bg-teal-700 text-white px-5 py-2.5 rounded-full shadow-sm hover:bg-teal-600 transition-all duration-300 transform hover:-translate-y-0.5">
-                        Admin Panel
-                    </a>
-                <?php endif; ?>
-                <a href="<?= base_url('auth/logout') ?>" class="font-display font-semibold text-sm bg-red-600 text-white px-5 py-2.5 rounded-full shadow-sm hover:bg-red-500 transition-all duration-300 transform hover:-translate-y-0.5">
-                    Logout
-                </a>
-            <?php else: ?>
-                <a href="<?= base_url('auth/') ?>" class="font-display font-semibold text-sm bg-teal-900 text-white px-5 py-2.5 rounded-full shadow-sm hover:bg-teal-800 transition-all duration-300 transform hover:-translate-y-0.5">
-                    Masuk
-                </a>
-            <?php endif; ?>
+        <div class="flex items-center">
+            <a href="<?= base_url('auth/') ?>" class="font-display font-semibold text-sm bg-teal-900 text-white px-5 py-2.5 rounded-full shadow-sm hover:bg-teal-800 transition-all duration-300 transform hover:-translate-y-0.5">
+                Masuk
+            </a>
         </div>
 
     </div>

@@ -231,4 +231,180 @@ class Admin extends CI_Controller
         }
         redirect('admin/silsilah');
     }
+
+    // ================= KELOLA FORUM DISKUSI =================
+
+    public function forum()
+    {
+        $search = $this->input->get('search') ?? '';
+
+        $data = [
+            'admin_name' => $this->session->userdata('full_name'),
+            'admin_role' => $this->session->userdata('role'),
+            'forums'     => $this->Admin_model->get_all_forums_admin($search),
+            'search'     => $search,
+        ];
+
+        $this->load->view('admin/forum/index', $data);
+    }
+
+    public function forum_delete($id)
+    {
+        $forum = $this->Admin_model->get_forum_by_id_admin($id);
+        if ($forum) {
+            $this->Admin_model->delete_forum_admin($id);
+            $this->session->set_flashdata('success', 'Topik forum berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Forum tidak ditemukan.');
+        }
+        redirect('admin/forum');
+    }
+
+    // ================= KELOLA BERITA =================
+
+    public function berita()
+    {
+        $search = $this->input->get('search') ?? '';
+        $status = $this->input->get('status') ?? '';
+
+        $data = [
+            'admin_name' => $this->session->userdata('full_name'),
+            'admin_role' => $this->session->userdata('role'),
+            'news_list'  => $this->Admin_model->get_all_news_admin($search, $status),
+            'search'     => $search,
+            'status'     => $status,
+        ];
+
+        $this->load->view('admin/berita/index', $data);
+    }
+
+    public function berita_add()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('title', 'Judul Berita', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $data = [
+                'admin_name' => $this->session->userdata('full_name'),
+                'admin_role' => $this->session->userdata('role'),
+            ];
+            $this->load->view('admin/berita/add', $data);
+        } else {
+            $thumbnail = null;
+
+            // Handle thumbnail upload
+            if (!empty($_FILES['thumbnail']['name'])) {
+                $config['upload_path']   = './assets/uploads/news/';
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
+                $config['max_size']      = 2048;
+                $config['file_name']     = 'news_' . time();
+
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('thumbnail')) {
+                    $upload_data = $this->upload->data();
+                    $thumbnail   = 'assets/uploads/news/' . $upload_data['file_name'];
+                }
+            }
+
+            $title = $this->input->post('title');
+            $slug  = url_title($title, 'dash', TRUE) . '-' . time();
+
+            $insert_data = [
+                'title'         => $title,
+                'slug'          => $slug,
+                'thumbnail'     => $thumbnail,
+                'content'       => $this->input->post('content'),
+                'external_link' => $this->input->post('external_link') ?: null,
+                'author_id'     => $this->session->userdata('user_id'),
+                'status'        => $this->input->post('status') ?: 'draft',
+            ];
+
+            $this->Admin_model->insert_news($insert_data);
+            $this->session->set_flashdata('success', 'Berita berhasil ditambahkan.');
+            redirect('admin/berita');
+        }
+    }
+
+    public function berita_edit($id)
+    {
+        $news = $this->Admin_model->get_news_by_id($id);
+        if (!$news) {
+            show_404();
+        }
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('title', 'Judul Berita', 'required|trim');
+
+        if ($this->form_validation->run() == FALSE) {
+            $data = [
+                'admin_name' => $this->session->userdata('full_name'),
+                'admin_role' => $this->session->userdata('role'),
+                'news'       => $news,
+            ];
+            $this->load->view('admin/berita/edit', $data);
+        } else {
+            $thumbnail = $news['thumbnail'];
+
+            // Handle thumbnail upload
+            if (!empty($_FILES['thumbnail']['name'])) {
+                $config['upload_path']   = './assets/uploads/news/';
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
+                $config['max_size']      = 2048;
+                $config['file_name']     = 'news_' . time();
+
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('thumbnail')) {
+                    if ($thumbnail && file_exists('./' . $thumbnail)) {
+                        unlink('./' . $thumbnail);
+                    }
+                    $upload_data = $this->upload->data();
+                    $thumbnail   = 'assets/uploads/news/' . $upload_data['file_name'];
+                }
+            }
+
+            $update_data = [
+                'title'         => $this->input->post('title'),
+                'thumbnail'     => $thumbnail,
+                'content'       => $this->input->post('content'),
+                'external_link' => $this->input->post('external_link') ?: null,
+                'status'        => $this->input->post('status') ?: 'draft',
+            ];
+
+            $this->Admin_model->update_news($id, $update_data);
+            $this->session->set_flashdata('success', 'Berita berhasil diperbarui.');
+            redirect('admin/berita');
+        }
+    }
+
+    public function berita_delete($id)
+    {
+        $news = $this->Admin_model->get_news_by_id($id);
+        if ($news) {
+            if ($news['thumbnail'] && file_exists('./' . $news['thumbnail'])) {
+                unlink('./' . $news['thumbnail']);
+            }
+            $this->Admin_model->delete_news($id);
+            $this->session->set_flashdata('success', 'Berita berhasil dihapus.');
+        } else {
+            $this->session->set_flashdata('error', 'Berita tidak ditemukan.');
+        }
+        redirect('admin/berita');
+    }
+
+    public function berita_toggle_status($id)
+    {
+        $this->Admin_model->toggle_news_status($id);
+        $this->session->set_flashdata('success', 'Status berita berhasil diubah.');
+        redirect('admin/berita');
+    }
 }

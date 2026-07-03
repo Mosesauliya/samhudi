@@ -98,5 +98,106 @@ class Admin_model extends CI_Model
 
         return $this->db->query($sql, array((int)$limit))->result_array();
     }
+
+    // =================== FORUM ADMIN ===================
+
+    /**
+     * Ambil semua forum dengan jumlah komentar dan nama author
+     */
+    public function get_all_forums_admin($search = '')
+    {
+        $this->db->select('forums.*, users.full_name AS author_name,
+            (SELECT COUNT(*) FROM forum_comments WHERE forum_comments.forum_id = forums.id) AS comment_count');
+        $this->db->from('forums');
+        $this->db->join('users', 'users.id = forums.created_by', 'left');
+        if (!empty($search)) {
+            $this->db->like('forums.title', $search);
+        }
+        $this->db->order_by('forums.created_at', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    /**
+     * Ambil detail forum by ID
+     */
+    public function get_forum_by_id_admin($id)
+    {
+        $this->db->select('forums.*, users.full_name AS author_name');
+        $this->db->from('forums');
+        $this->db->join('users', 'users.id = forums.created_by', 'left');
+        $this->db->where('forums.id', $id);
+        return $this->db->get()->row_array();
+    }
+
+    /**
+     * Hapus forum (cascade ke komentar)
+     */
+    public function delete_forum_admin($id)
+    {
+        return $this->db->delete('forums', ['id' => $id]);
+    }
+
+    // =================== BERITA ADMIN ===================
+
+    /**
+     * Ambil semua berita + nama author
+     */
+    public function get_all_news_admin($search = '', $status = '')
+    {
+        $this->db->select('news.*, users.full_name AS author_name');
+        $this->db->from('news');
+        $this->db->join('users', 'users.id = news.author_id', 'left');
+        if (!empty($search)) {
+            $this->db->like('news.title', $search);
+        }
+        if (!empty($status)) {
+            $this->db->where('news.status', $status);
+        }
+        $this->db->order_by('news.created_at', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    /**
+     * Ambil satu berita by ID
+     */
+    public function get_news_by_id($id)
+    {
+        return $this->db->get_where('news', ['id' => $id])->row_array();
+    }
+
+    /**
+     * Tambah berita baru
+     */
+    public function insert_news($data)
+    {
+        return $this->db->insert('news', $data);
+    }
+
+    /**
+     * Update berita
+     */
+    public function update_news($id, $data)
+    {
+        return $this->db->update('news', $data, ['id' => $id]);
+    }
+
+    /**
+     * Hapus berita
+     */
+    public function delete_news($id)
+    {
+        return $this->db->delete('news', ['id' => $id]);
+    }
+
+    /**
+     * Toggle status berita draft/publish
+     */
+    public function toggle_news_status($id)
+    {
+        $news = $this->get_news_by_id($id);
+        if (!$news) return false;
+        $new_status = ($news['status'] === 'publish') ? 'draft' : 'publish';
+        return $this->db->update('news', ['status' => $new_status], ['id' => $id]);
+    }
 }
 
