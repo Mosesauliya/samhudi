@@ -172,40 +172,6 @@
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td class="py-4 text-sm text-white/90 font-medium">Membuat Postingan Forum</td>
-                                    <td class="py-4 text-sm text-white/80">Auli</td>
-                                    <td class="py-4 text-sm text-white/60">1 Juni 2026</td>
-                                    <td class="py-4 text-sm">
-                                        <span class="text-white/80">Menunggu</span>
-                                    </td>
-                                    <td class="py-4 text-sm">
-                                        <a href="#" class="font-bold text-white hover:underline transition-all">Detail</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-4 text-sm text-white/90 font-medium">Menambahkan Data Family</td>
-                                    <td class="py-4 text-sm text-white/80">Alif</td>
-                                    <td class="py-4 text-sm text-white/60">15 Juni 2026</td>
-                                    <td class="py-4 text-sm">
-                                        <span class="text-white/80">Berhasil</span>
-                                    </td>
-                                    <td class="py-4 text-sm">
-                                        <a href="#" class="font-bold text-white hover:underline transition-all">Detail</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="py-4 text-sm text-white/90 font-medium">Membuat Postingan Forum</td>
-                                    <td class="py-4 text-sm text-white/80">Richa</td>
-                                    <td class="py-4 text-sm text-white/60">28 Mei 2026</td>
-                                    <td class="py-4 text-sm">
-                                        <span class="text-white/80">Berhasil</span>
-                                    </td>
-                                    <td class="py-4 text-sm">
-                                        <a href="#" class="font-bold text-white hover:underline transition-all">Detail</a>
-                                    </td>
-                                </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
