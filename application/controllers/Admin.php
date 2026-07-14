@@ -25,6 +25,80 @@ class Admin extends CI_Controller
 
     public function index()
     {
+        $config_path = FCPATH . 'assets/banner-config.json';
+        $images_path = FCPATH . 'assets/images/';
+
+        // Handle carousel upload & caption update
+        $carousel_config_path = FCPATH . 'assets/carousel-config.json';
+
+        if ($this->input->method() === 'post' && $this->input->post('save_carousel')) {
+            $carousel = json_decode(file_get_contents($carousel_config_path), true);
+            $captions = $this->input->post('captions') ?: [];
+
+            $upload_path = $images_path . 'family/';
+            $files = $_FILES['carousel_file'];
+
+            $count = max(count($captions), is_array($files['name']) ? count($files['name']) : 0);
+            $new_carousel = [];
+
+            for ($i = 0; $i < $count; $i++) {
+                $caption = $captions[$i] ?? 'Keluarga';
+                $file = isset($carousel[$i]) ? $carousel[$i]['file'] : null;
+
+                if (!empty($files['name'][$i]) && $files['error'][$i] === 0) {
+                    if (!is_dir($upload_path)) mkdir($upload_path, 0777, true);
+                    $ext = pathinfo($files['name'][$i], PATHINFO_EXTENSION);
+                    $new_name = 'carousel_' . time() . '_' . $i . '.' . $ext;
+                    move_uploaded_file($files['tmp_name'][$i], $upload_path . $new_name);
+                    $file = 'family/' . $new_name;
+                }
+
+                if ($file) {
+                    $new_carousel[] = ['file' => $file, 'caption' => $caption];
+                }
+            }
+
+            file_put_contents($carousel_config_path, json_encode($new_carousel));
+            $this->session->set_flashdata('carousel_success', 'Carousel berhasil diperbarui.');
+            redirect('admin#carousel-section');
+        }
+
+        if ($this->input->method() === 'post' && $this->input->post('delete_carousel')) {
+            $index = $this->input->post('delete_index');
+            $carousel = json_decode(file_get_contents($carousel_config_path), true);
+            if (isset($carousel[$index])) {
+                $file_path = $images_path . $carousel[$index]['file'];
+                if (file_exists($file_path)) unlink($file_path);
+                array_splice($carousel, $index, 1);
+                file_put_contents($carousel_config_path, json_encode($carousel));
+            }
+            redirect('admin#carousel-section');
+        }
+
+        if ($this->input->method() === 'post' && $this->input->post('upload_banner')) {
+            if (!empty($_FILES['banner_file']['name'])) {
+                $config['upload_path'] = $images_path;
+                $config['allowed_types'] = 'jpg|jpeg|png|webp|gif';
+                $config['file_name'] = 'banner_' . time();
+                $this->load->library('upload', $config);
+
+                if ($this->upload->do_upload('banner_file')) {
+                    $data = $this->upload->data();
+                    $current = json_decode(file_get_contents($config_path), true);
+                    $current['file'] = $data['file_name'];
+                    file_put_contents($config_path, json_encode($current));
+                    $this->session->set_flashdata('banner_success', 'Banner berhasil diperbarui.');
+                } else {
+                    $this->session->set_flashdata('banner_error', strip_tags($this->upload->display_errors()));
+                }
+            } else {
+                $this->session->set_flashdata('banner_error', 'Pilih file gambar terlebih dahulu.');
+            }
+            redirect('admin#banner-section');
+        }
+
+        $banner_config = json_decode(file_get_contents($config_path), true);
+
         $data = [
             'admin_name'        => $this->session->userdata('full_name'),
             'admin_role'        => $this->session->userdata('role'),
@@ -33,6 +107,8 @@ class Admin extends CI_Controller
             'total_forums'      => $this->Admin_model->get_total_forums(),
             'total_wills'       => $this->Admin_model->get_total_wills(),
             'recent_activities' => $this->Admin_model->get_recent_activities(5),
+            'selected_banner'   => $banner_config['file'] ?? 'background2.png',
+            'carousel_items'    => json_decode(file_get_contents($carousel_config_path), true),
         ];
 
         $this->load->view('admin/dashboard', $data);
@@ -405,4 +481,5 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('success', 'Status berita berhasil diubah.');
         redirect('admin/berita');
     }
+
 }

@@ -1,12 +1,13 @@
+<?php $is_home = !$this->uri->segment(1); ?>
 <nav class="<?= !$this->uri->segment(1) ? '' : 'bg-[#274d4f] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)]' ?> sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-x-16">
 
-        <div class="font-display font-bold text-lg text-white tracking-tight">
+        <div class="font-display font-bold text-lg text-white tracking-tight leading-none">
             HM Samhudi
         </div>
 
         <!-- Desktop Menu -->
-        <ul class="hidden md:flex items-center gap-20 font-display font-semibold text-base tracking-wide text-white/90">
+        <ul class="hidden md:flex items-center gap-10 font-display font-semibold text-base tracking-wide text-white/90">
             <li>
                 <a href="<?= base_url() ?>" class="relative py-2 hover:text-white transition-colors duration-300 group">
                     Home
@@ -27,7 +28,7 @@
             </li>
             <li>
                 <a href="<?= base_url('Familytree') ?>" class="relative py-2 hover:text-white transition-colors duration-300 group">
-                    Data Keluarga
+                    Silsilah Keluarga
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                 </a>
             </li>
@@ -49,9 +50,9 @@
         <div class="hidden md:flex items-center">
             <?php if ($this->session->userdata('logged_in')): ?>
             <div id="desktop-user-menu" class="relative cursor-pointer select-none group">
-                <div class="flex items-center gap-4 bg-[#274d4f] hover:bg-[#1d3a3c] px-5 py-2.5 rounded-full transition-all duration-200">
-                    <i class="bi bi-person-fill text-white text-base"></i>
-                    <span class="font-display font-semibold text-sm text-white">
+                <div class="flex items-center gap-4 <?= $is_home ? 'bg-[#274d4f] hover:bg-[#1d3a3c]' : 'bg-white hover:bg-gray-100' ?> px-5 py-2.5 rounded-full transition-all duration-200">
+                    <i class="bi bi-person-fill <?= $is_home ? 'text-white' : 'text-[#274d4f]' ?> text-base"></i>
+                    <span class="font-display font-semibold text-sm <?= $is_home ? 'text-white' : 'text-[#274d4f]' ?>">
                         <?= $this->session->userdata('full_name') ?>
                     </span>
                 </div>
@@ -115,13 +116,13 @@
                 <a href="<?= base_url() ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="home"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-house mr-2"></i><?php endif; ?>Home</a>
             </li>
             <li>
-                <a href="<?= base_url('Wasiat') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="wasiat"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-book mr-2"></i><?php endif; ?>Wasiat</a>
+                <a href="<?= base_url('Wasiat') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="wasiat"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-book mr-2"></i><?php endif; ?>Wasiat alm. H.M Samhudi</a>
             </li>
             <li>
                 <a href="#" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="yayasan"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-house-heart mr-2"></i><?php endif; ?>Yayasan</a>
             </li>
             <li>
-                <a href="<?= base_url('Familytree') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="familytree"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-people mr-2"></i><?php endif; ?>Data Keluarga</a>
+                <a href="<?= base_url('Familytree') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="familytree"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-people mr-2"></i><?php endif; ?>Silsilah Keluarga</a>
             </li>
             <li>
                 <a href="<?= base_url('forum') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="forum"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-chat-dots mr-2"></i><?php endif; ?>Forum Diskusi</a>

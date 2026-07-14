@@ -54,20 +54,12 @@
 
 .bg-hero-section {
     min-height: 100dvh;
-    background-image: url('../images/background3.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-color: #2A4D4F;
     border-radius: 0 0 12px 12px;
     overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    .bg-hero-section {
-        background-image: url('../images/background2.png');
-        background-position: 70% 15%;
-    }
 }
 
 .hero-overlay {
@@ -184,7 +176,7 @@
 
 .carousel-container {
     position: relative;
-    height: 500px;
+    height: 420px;
     width: 100%;
 }
 
@@ -192,26 +184,26 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 320px;
+    width: 260px;
     background: #fff;
-    padding: 15px;
+    padding: 10px;
     border-radius: 0;
-    box-shadow: 0 10px 25px rgba(0,0,0,.3);
+    box-shadow: 0 8px 20px rgba(0,0,0,.3);
     transition: .6s;
     cursor: pointer;
 }
 
 .carousel-img {
     width: 100%;
-    height: 350px;
+    height: 280px;
     object-fit: cover;
 }
 
 .carousel-caption {
     text-align: right;
     font-family: 'Brittany Signature', cursive;
-    font-size: 20px;
-    margin-top: 8px;
+    font-size: 16px;
+    margin-top: 4px;
     color: #1f1f1f;
 }
 
@@ -223,7 +215,8 @@
 }
 
 .overlap-img {
-    width: 100%;
+    width: 85%;
+    max-width: 420px;
     object-fit: cover;
 }
 
@@ -232,8 +225,8 @@
     left: -20px;
     top: 50%;
     transform: translateY(-50%);
-    width: 60px;
-    height: 180px;
+    width: 40px;
+    height: 120px;
     background-image: radial-gradient(#8b7d72 1px, transparent 1px);
     background-size: 8px 8px;
     opacity: .5;
@@ -242,13 +235,13 @@
 .overlap-box {
     background: #fff;
     width: auto;
-    max-width: 500px;
+    max-width: 480px;
     height: auto;
     margin-left: 20px;
     position: relative;
     z-index: 2;
-    padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
-    box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    padding: clamp(1rem, 3vw, 1.8rem) clamp(1rem, 3vw, 1.8rem);
+    box-shadow: 0 15px 30px rgba(0,0,0,.12);
 }
 
 .overlap-content {
@@ -257,27 +250,27 @@
 
 .overlap-heading {
     position: absolute;
-    top: -40px;
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
     font-family: 'Brittany Signature', cursive;
-    font-size: 42px;
+    font-size: 32px;
     color: #2f241e;
     white-space: nowrap;
 }
 
 .overlap-text {
     font-family: Inter, sans-serif;
-    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-size: clamp(1rem, 2.8vw, 1.6rem);
     font-weight: 300;
     line-height: 1.5;
     color: #4b382f;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .overlap-sender {
     font-family: Inter, sans-serif;
-    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-size: clamp(1rem, 2.8vw, 1.6rem);
     font-weight: 300;
     color: #4b382f;
 }

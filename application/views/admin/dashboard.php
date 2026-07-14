@@ -212,9 +212,280 @@
                 </div>
             </div>
 
+            <!-- Banner Settings -->
+            <div id="banner-section" class="bg-teal-900/60 border border-teal-800 rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-teal-800 flex items-center justify-center text-teal-300 border border-teal-700">
+                        <i class="bi bi-images"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-white">Banner Landing Page</h3>
+                        <p class="text-xs text-teal-400">Drag & drop gambar atau klik upload dari file explorer</p>
+                    </div>
+                </div>
+
+                <?php if ($this->session->flashdata('banner_success')): ?>
+                <div class="bg-green-500/20 border border-green-500/40 text-green-200 px-5 py-3 rounded-lg text-sm mb-4">
+                    <?= $this->session->flashdata('banner_success') ?>
+                </div>
+                <?php endif; ?>
+
+                <?php if ($this->session->flashdata('banner_error')): ?>
+                <div class="bg-red-500/20 border border-red-500/40 text-red-200 px-5 py-3 rounded-lg text-sm mb-4">
+                    <?= $this->session->flashdata('error') ?>
+                </div>
+                <?php endif; ?>
+
+                <form method="post" enctype="multipart/form-data" class="space-y-4">
+                    <input type="hidden" name="upload_banner" value="1">
+
+                    <div class="relative group cursor-pointer" onclick="previewBanner(this)">
+                        <img src="<?= base_url('assets/images/' . $selected_banner) ?>" class="w-full h-64 object-cover rounded-xl border border-teal-700" id="banner-preview-img">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all rounded-xl flex items-center justify-center">
+                            <i class="bi bi-arrows-fullscreen text-white text-2xl opacity-0 group-hover:opacity-100 transition-all"></i>
+                        </div>
+                    </div>
+
+                    <div class="drop-zone border-2 border-dashed border-teal-700 rounded-xl p-6 text-center cursor-pointer hover:border-teal-500 transition-all" onclick="document.getElementById('banner-upload').click()" ondragover="event.preventDefault();this.classList.add('border-teal-400','bg-teal-800/50')" ondragleave="this.classList.remove('border-teal-400','bg-teal-800/50')" ondrop="handleDrop(event)">
+                        <i class="bi bi-cloud-arrow-up text-3xl text-teal-400"></i>
+                        <p class="text-sm text-teal-300 mt-2">Klik atau drag & drop gambar banner</p>
+                        <input id="banner-upload" type="file" name="banner_file" accept="image/*" class="hidden" onchange="previewFile(this, 'banner-preview-img')">
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="bg-white text-teal-900 font-display font-semibold px-8 py-2.5 rounded-full hover:bg-gray-100 transition-all shadow-lg text-sm">
+                            <i class="bi bi-check-lg mr-1"></i> Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Carousel Settings -->
+            <div id="carousel-section" class="bg-teal-900/60 border border-teal-800 rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-lg bg-teal-800 flex items-center justify-center text-teal-300 border border-teal-700">
+                        <i class="bi bi-images"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display font-bold text-white">Carousel Keluarga</h3>
+                        <p class="text-xs text-teal-400">Kelola gambar & caption carousel di halaman utama</p>
+                    </div>
+                </div>
+
+                <?php if ($this->session->flashdata('carousel_success')): ?>
+                <div class="bg-green-500/20 border border-green-500/40 text-green-200 px-5 py-3 rounded-lg text-sm mb-4">
+                    <?= $this->session->flashdata('carousel_success') ?>
+                </div>
+                <?php endif; ?>
+
+                <form method="post" enctype="multipart/form-data" class="space-y-4" id="carousel-form">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="carousel-grid">
+                        <?php foreach ($carousel_items as $i => $item): ?>
+                        <div class="bg-teal-800/40 border border-teal-700 rounded-xl p-4 space-y-3">
+                            <div class="relative group cursor-pointer" onclick="previewCarousel(this)">
+                                <img src="<?= base_url('assets/images/' . $item['file']) ?>" class="w-full h-36 object-cover rounded-lg border border-teal-700">
+                                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all rounded-lg flex items-center justify-center">
+                                    <i class="bi bi-arrows-fullscreen text-white text-xl opacity-0 group-hover:opacity-100 transition-all"></i>
+                                </div>
+                            </div>
+                            <input type="text" name="captions[]" value="<?= htmlspecialchars($item['caption']) ?>" class="w-full bg-teal-800 border border-teal-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="Caption">
+                            <div class="flex gap-2">
+                                <div class="drop-zone-carousel flex-1 border-2 border-dashed border-teal-700 rounded-lg p-3 text-center cursor-pointer hover:border-teal-500 transition-all text-xs" onclick="document.getElementById('carousel-upload-<?= $i ?>').click()" ondragover="event.preventDefault();this.classList.add('border-teal-400','bg-teal-800/50')" ondragleave="this.classList.remove('border-teal-400','bg-teal-800/50')" ondrop="handleCarouselDrop(event, <?= $i ?>)">
+                                    <i class="bi bi-cloud-arrow-up text-teal-400"></i>
+                                    <p class="text-teal-400 mt-1">Ganti</p>
+                                    <input id="carousel-upload-<?= $i ?>" type="file" name="carousel_file[]" accept="image/*" class="hidden" onchange="previewCarouselInput(this, <?= $i ?>)">
+                                </div>
+                                <button type="button" onclick="deleteCarousel(<?= $i ?>)" class="px-3 py-1.5 bg-red-500/20 text-red-300 rounded-lg hover:bg-red-500/40 transition-all text-xs">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <input type="hidden" name="delete_index" value="">
+                    <div class="flex gap-3">
+                        <button type="submit" name="save_carousel" value="1" class="bg-white text-teal-900 font-display font-semibold px-6 py-2.5 rounded-full hover:bg-gray-100 transition-all shadow-lg text-sm">
+                            <i class="bi bi-check-lg mr-1"></i> Simpan Carousel
+                        </button>
+                        <button type="button" onclick="addCarouselCard()" class="border border-dashed border-teal-600 text-teal-400 hover:text-white font-display font-semibold px-6 py-2.5 rounded-full hover:bg-teal-800/50 transition-all text-sm">
+                            <i class="bi bi-plus-lg mr-1"></i> Tambah
+                        </button>
+                    </div>
+                </form>
+            </div>
+
         </div>
 
     </main>
 
+    <!-- Modal Preview -->
+    <div id="banner-modal" class="fixed inset-0 bg-black/80 z-[9999] hidden items-center justify-center" onclick="if(event.target===this)closePreview()">
+        <button onclick="closePreview()" class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300 transition-all">&times;</button>
+        <img id="banner-modal-img" class="max-w-[90vw] max-h-[90vh] rounded-2xl shadow-2xl">
+    </div>
+
+    <script>
+        function previewBanner(el) {
+            const img = el.querySelector('img');
+            const modal = document.getElementById('banner-modal');
+            const modalImg = document.getElementById('banner-modal-img');
+            modalImg.src = img.src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePreview() {
+            const modal = document.getElementById('banner-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const zone = e.target.closest('.drop-zone');
+    zone.classList.remove('border-teal-400', 'bg-teal-800/50');
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        const fileInput = document.getElementById('banner-upload');
+        if (fileInput) {
+            fileInput.files = files;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                document.getElementById('banner-preview-img').src = ev.target.result;
+            };
+            reader.readAsDataURL(files[0]);
+        }
+    }
+}
+
+function previewFile(input, previewId) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById(previewId).src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function previewCarousel(el) {
+    const img = el.querySelector('img');
+    const modal = document.getElementById('banner-modal');
+    const modalImg = document.getElementById('banner-modal-img');
+    modalImg.src = img.src;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function addCarouselCard() {
+    const grid = document.getElementById('carousel-grid');
+    const idx = grid.children.length;
+    const card = document.createElement('div');
+    card.className = 'bg-teal-800/40 border border-teal-700 rounded-xl p-4 space-y-3';
+    card.innerHTML = `
+        <div class="w-full h-36 bg-teal-800 rounded-lg border border-dashed border-teal-600 flex items-center justify-center text-teal-500 text-xs">Preview</div>
+        <input type="text" name="captions[]" value="Keluarga" class="w-full bg-teal-800 border border-teal-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" placeholder="Caption">
+        <div class="flex gap-2">
+            <div class="drop-zone-carousel flex-1 border-2 border-dashed border-teal-700 rounded-lg p-3 text-center cursor-pointer hover:border-teal-500 transition-all text-xs" onclick="document.getElementById('carousel-upload-new-${idx}').click()" ondragover="event.preventDefault();this.classList.add('border-teal-400','bg-teal-800/50')" ondragleave="this.classList.remove('border-teal-400','bg-teal-800/50')" ondrop="handleCarouselDrop(event, -1)">
+                <i class="bi bi-cloud-arrow-up text-teal-400"></i>
+                <p class="text-teal-400 mt-1">Ganti</p>
+                <input id="carousel-upload-new-${idx}" type="file" name="carousel_file[]" accept="image/*" class="hidden" onchange="previewCarouselInput(this, -1)">
+            </div>
+        </div>
+    `;
+    grid.appendChild(card);
+}
+
+function handleCarouselDrop(e, idx) {
+    e.preventDefault();
+    e.stopPropagation();
+    const zone = e.target.closest('.drop-zone-carousel');
+    zone.classList.remove('border-teal-400', 'bg-teal-800/50');
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        const inputId = idx >= 0 ? 'carousel-upload-' + idx : zone.querySelector('input[type="file"]').id;
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.files = files;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const box = zone.closest('.space-y-3');
+                const existingImg = box.querySelector('.relative.group');
+                if (existingImg) {
+                    existingImg.querySelector('img').src = ev.target.result;
+                } else {
+                    const placeholder = box.querySelector('div:first-child');
+                    if (placeholder) {
+                        placeholder.outerHTML =
+                            '<div class="relative group cursor-pointer" onclick="previewCarousel(this)">' +
+                                '<img src="' + ev.target.result + '" class="w-full h-36 object-cover rounded-lg border border-teal-700">' +
+                                '<div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all rounded-lg flex items-center justify-center">' +
+                                    '<i class="bi bi-arrows-fullscreen text-white text-xl opacity-0 group-hover:opacity-100 transition-all"></i>' +
+                                '</div>' +
+                            '</div>';
+                    }
+                }
+            };
+            reader.readAsDataURL(files[0]);
+        }
+    }
+}
+
+function previewCarouselInput(input, idx) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const box = input.closest('.space-y-3');
+            const wrapper = box.querySelector('.relative.group');
+            if (wrapper) {
+                wrapper.querySelector('img').src = e.target.result;
+            } else {
+                const placeholder = box.querySelector('div:first-child');
+                if (placeholder) {
+                    placeholder.outerHTML =
+                        '<div class="relative group cursor-pointer" onclick="previewCarousel(this)">' +
+                            '<img src="' + e.target.result + '" class="w-full h-36 object-cover rounded-lg border border-teal-700">' +
+                            '<div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all rounded-lg flex items-center justify-center">' +
+                                '<i class="bi bi-arrows-fullscreen text-white text-xl opacity-0 group-hover:opacity-100 transition-all"></i>' +
+                            '</div>' +
+                        '</div>';
+                }
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function deleteCarousel(index) {
+    if (confirm('Hapus item ini?')) {
+        const form = document.getElementById('carousel-form');
+        const saveBtn = form.querySelector('button[name="save_carousel"]');
+        if (saveBtn) saveBtn.disabled = true;
+        const saveInput = form.querySelector('input[name="save_carousel"]');
+        if (saveInput) saveInput.remove();
+        const exists = form.querySelector('input[name="delete_carousel"]');
+        if (exists) exists.remove();
+        const inp = document.createElement('input');
+        inp.type = 'hidden';
+        inp.name = 'delete_carousel';
+        inp.value = '1';
+        form.appendChild(inp);
+        const idxInp = document.createElement('input');
+        idxInp.type = 'hidden';
+        idxInp.name = 'delete_index';
+        idxInp.value = index;
+        form.appendChild(idxInp);
+        form.submit();
+    }
+}
+    </script>
 </body>
 </html>

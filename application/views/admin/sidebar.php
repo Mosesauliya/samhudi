@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $current_page = isset($active_menu) ? $active_menu : ($this->uri->segment(2) ? $this->uri->segment(2) : $this->uri->segment(1));
 ?>
 <!-- ================= SIDEBAR ================= -->
-<aside class="w-72 bg-brand-dark border-r border-brand-medium/30 flex flex-col shrink-0">
+<aside class="w-72 bg-brand-dark border-r border-brand-medium/30 flex flex-col shrink-0 sticky top-0 h-screen">
     
     <!-- Profile Section -->
     <div class="p-6 border-b border-brand-medium/30 flex items-center gap-4">
