@@ -28,8 +28,8 @@ class Home extends CI_Controller {
         $this->load->view('templates/header');
         $this->load->view('partials/navbar');
         $this->load->view('home/hero');
-        $this->load->view('home/sambutan');
         $this->load->view('home/carousel', ['families' => $data['families']]);
+        $this->load->view('home/sambutan');
         $this->load->view('home/intro');
         $this->load->view('home/berita', ['news_items' => $data['news_items']]);
         $this->load->view('templates/footer');

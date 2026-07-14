@@ -1,4 +1,4 @@
-<nav class="bg-[#274d4f] sticky top-0 z-50 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)]">
+<nav class="<?= !$this->uri->segment(1) ? '' : 'bg-[#274d4f] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)]' ?> sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 
         <div class="font-display font-bold text-lg text-white tracking-tight">
@@ -34,6 +34,12 @@
             <li>
                 <a href="<?= base_url('forum') ?>" class="relative py-2 hover:text-white transition-colors duration-300 group">
                     Forum Diskusi
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </li>
+            <li>
+                <a href="<?= base_url('Berita') ?>" class="relative py-2 hover:text-white transition-colors duration-300 group">
+                    Berita
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                 </a>
             </li>
@@ -91,6 +97,9 @@
             </li>
             <li>
                 <a href="<?= base_url('forum') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="forum"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-chat-dots mr-2"></i><?php endif; ?>Forum Diskusi</a>
+            </li>
+            <li>
+                <a href="<?= base_url('Berita') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="berita"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-newspaper mr-2"></i><?php endif; ?>Berita</a>
             </li>
         <?php if (!$this->session->userdata('logged_in')): ?>
             <li class="px-6 pt-2">
