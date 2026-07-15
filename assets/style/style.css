@@ -273,6 +273,7 @@ body {
     line-height: 1.5;
     color: #4b382f;
     margin-bottom: 20px;
+    
 }
 
 .overlap-sender {
@@ -303,7 +304,9 @@ body {
     .overlap-text {
         font-size: 1.05rem;
         line-height: 1.5;
-        text-align: center;
+        text-align: justify;       
+        text-align-last: center;       
+        
     }
     .overlap-sender {
         font-size: 1.05rem;
@@ -332,7 +335,7 @@ body {
     .sambutan-text {
         font-size: 1.05rem !important;
         line-height: 1.6;
-        text-align: left; /* Matikan justify di mobile agar kata tidak berantakan renggang */
+        text-align: justify; 
         margin-bottom: 1.25rem;
     }
     .sambutan-closing {
