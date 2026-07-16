@@ -56,7 +56,7 @@
             <div id="desktop-user-menu" class="relative cursor-pointer select-none group">
                 <div id="user-pill" class="flex items-center gap-4 bg-white hover:bg-gray-100 px-5 py-2.5 rounded-full transition-all duration-200">
                     <i id="user-pill-icon" class="bi bi-person-fill text-[#274d4f] text-base"></i>
-                    <span id="user-pill-text" class="font-display font-semibold text-sm text-[#274d4f]">
+                    <span id="user-pill-text" class="font-display font-semibold text-sm text-[#274d4f] whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px]">
                         <?= $this->session->userdata('full_name') ?>
                     </span>
                 </div>
