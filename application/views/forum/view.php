@@ -6,24 +6,44 @@
  */
 ?>
 
-<!-- Custom Style for Forum Diskusi View -->
 <style>
     /* Color Palette */
     :root {
         --color-dark-teal: #274D4F;
-        --color-light-teal: #377C80;
+        --color-light-teal: #274D4F;
         --color-orange-accent: #E49438;
-        --color-bg-main: #1F3637;
+        --color-bg-main: #F8F9FA;
+        --color-text-main: #15201E;
+        --color-text-muted: #4b5e5b;
+        --color-card-bg: #ffffff;
+        --color-input-bg: #F8F9FA;
+        --color-bubble-bg: #eef0ef;
+        --color-border-dark: #8fa5a2;
+    }
+    
+    body[data-theme="dark"] {
+        --color-dark-teal: #274D4F;
+        --color-light-teal: #C8A84E;
+        --color-orange-accent: #C8A84E;
+        --color-bg-main: #0F211F;
+        --color-text-main: #FFFFFF;
+        --color-text-muted: #B1CDCE;
+        --color-card-bg: #1B3835;
+        --color-input-bg: #0d1314;
+        --color-bubble-bg: rgba(255, 255, 255, 0.05);
+        --color-border-dark: #22443F;
     }
     
     body {
-        background-color: var(--color-bg-main);
-        color: #FFFFFF;
+        background-color: var(--color-bg-main) !important;
+        color: var(--color-text-main) !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .forum-container {
-        background-color: var(--color-bg-main);
+        background-color: var(--color-bg-main) !important;
         min-height: 100vh;
+        transition: background-color 0.3s ease;
     }
 
     /* Custom scrollbar for comments list */
@@ -36,6 +56,118 @@
     .custom-scrollbar::-webkit-scrollbar-thumb {
         background: var(--color-light-teal);
         border-radius: 3px;
+    }
+
+    /* Override hardcoded classes for detail page */
+    /* Prepended with .forum-container to increase CSS specificity over Tailwind CDN runtime styles */
+    .forum-container .bg-\[\#274D4F\]\/50 {
+        background-color: var(--color-card-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#1F3637\]\/40 {
+        background-color: var(--color-bubble-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#1F3637\]\/20 {
+        background-color: var(--color-bubble-bg) !important;
+        opacity: 0.8;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#1b3435\] {
+        background-color: var(--color-card-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#1F3637\] {
+        background-color: var(--color-input-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#377C80\] {
+        background-color: var(--color-light-teal) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .text-white {
+        color: var(--color-text-main) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .text-white\/70 {
+        color: var(--color-text-main) !important;
+        opacity: 0.7;
+    }
+    .forum-container .text-white\/80 {
+        color: var(--color-text-main) !important;
+        opacity: 0.8;
+    }
+    .forum-container .text-teal-200 {
+        color: var(--color-text-muted) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .text-teal-300 {
+        color: var(--color-light-teal) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .border-teal-800\/30, 
+    .forum-container .border-teal-800\/20, 
+    .forum-container .border-teal-800\/40 {
+        border-color: var(--color-border-dark) !important;
+        transition: border-color 0.3s ease;
+    }
+    .forum-container .focus\:ring-\[\#377C80\]:focus {
+        --tw-ring-color: var(--color-light-teal) !important;
+    }
+    .forum-container input::placeholder, 
+    .forum-container textarea::placeholder {
+        color: var(--color-text-muted) !important;
+        opacity: 0.55 !important;
+    }
+
+    /* Specific Light Mode text overrides for opacity classes that default to white */
+    body[data-theme="light"] .forum-container .text-white {
+        color: var(--color-text-main) !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/20 {
+        color: var(--color-border-dark) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/30 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/40 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.65 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/50 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.8 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/60 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.9 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/70 {
+        color: var(--color-text-main) !important;
+        opacity: 0.75 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/80 {
+        color: var(--color-text-main) !important;
+        opacity: 0.9 !important;
+    }
+
+    /* Define cards highlight in Light Mode */
+    body[data-theme="light"] .forum-container .bg-\[\#274D4F\]\/50 {
+        box-shadow: 0 6px 24px rgba(39, 77, 79, 0.08) !important;
+        border: 1px solid var(--color-border-dark) !important;
+    }
+
+    /* Keep button text and icons dark on Gold accent buttons in Dark Mode */
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\] {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\] i {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\]:hover {
+        opacity: 0.9;
     }
 </style>
 

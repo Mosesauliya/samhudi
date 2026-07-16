@@ -1,11 +1,25 @@
 :root {
-  --forest-deep: #4A6055;
+  --forest-deep: #274D4F;
   --page-bg: #FFFFFF;
   --cream: #F4F9F5;
   --ink: #2a2a24;
   --ink-soft: #5a5c50;
   --line: #CBD9CF;
-  --primary-btn: #3D534A;
+  --primary-btn: #274D4F;
+  --container-bg: #ffffff;
+  --input-bg: #ffffff;
+}
+
+body[data-theme="dark"] {
+  --forest-deep: #C8A84E;
+  --page-bg: #0F211F;
+  --cream: #1B3835;
+  --ink: #FFFFFF;
+  --ink-soft: #B1CDCE;
+  --line: #22443F;
+  --primary-btn: #C8A84E;
+  --container-bg: #1B3835;
+  --input-bg: #0d1314;
 }
 
 .wizard-wrapper {
@@ -22,11 +36,12 @@
 .wizard-container {
   width: 100%;
   max-width: 600px;
-  background: white;
+  background: var(--container-bg);
   min-height: 500px;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
   position: relative;
 }
 
@@ -159,7 +174,7 @@
   justify-content: center;
   text-align: center;
   transition: all 0.2s;
-  background: white;
+  background: var(--container-bg);
   height: 100%;
   flex: 1;
 }
@@ -318,6 +333,8 @@
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 12px;
+  background: var(--input-bg);
+  color: var(--ink);
   font-family: 'Manrope', sans-serif;
   outline: none;
 }
@@ -382,13 +399,17 @@ button:disabled {
   color: white;
   flex: 1;
   justify-content: center;
+  transition: color 0.2s, background 0.2s;
 }
 .btn-primary:hover:not(:disabled) {
   opacity: 0.9;
 }
+body[data-theme="dark"] .btn-primary {
+  color: #0F211F !important;
+}
 
 .btn-secondary {
-  background: white;
+  background: var(--container-bg);
   color: var(--forest-deep);
   border: 1px solid var(--forest-deep);
   flex: 1;
@@ -423,7 +444,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #fcfcfc;
+  background: var(--cream);
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 25px;
@@ -452,11 +473,11 @@ button:disabled {
   display: flex;
   gap: 10px;
   justify-content: center;
-  background: white;
+  background: var(--container-bg);
   padding: 10px;
   border-radius: 12px;
   border: 1px solid var(--line);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-shadow: var(--shadow-sm);
   z-index: 2;
 }
 

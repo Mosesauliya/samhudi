@@ -34,21 +34,43 @@ if (!function_exists('time_elapsed_string')) {
 <!-- Custom Style for Profile -->
 <style>
     :root {
-        --color-bg-dark: #15201E;
-        --color-border-dark: #374D49;
-        --color-light-teal: #377C80;
+        --color-bg-dark: #F8F9FA;
+        --color-border-dark: #8fa5a2;
+        --color-light-teal: #274D4F;
         --color-orange-accent: #E49438;
+        --color-text-muted: #4b5e5b;
+        --color-text-main: #15201E;
+        --color-card-bg: #ffffff;
+        --color-input-bg: #F8F9FA;
+        --color-chat-bubble-bg: #eef0ef;
+        --color-forum-gradient: #F8F9FA;
+        --color-card-shadow: 0 6px 24px rgba(39, 77, 79, 0.08);
+    }
+    
+    body[data-theme="dark"] {
+        --color-bg-dark: #0F211F;
+        --color-border-dark: #22443F;
+        --color-light-teal: #C8A84E;
+        --color-orange-accent: #C8A84E;
         --color-text-muted: #B1CDCE;
+        --color-text-main: #FFFFFF;
+        --color-card-bg: #1B3835;
+        --color-input-bg: #0d1314;
+        --color-chat-bubble-bg: rgba(255, 255, 255, 0.05);
+        --color-forum-gradient: #0F211F;
+        --color-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     }
     
     body {
         background-color: var(--color-bg-dark) !important;
-        color: #FFFFFF;
+        color: var(--color-text-main) !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .forum-container {
-        background: linear-gradient(135deg, #15201E 0%, #41635D 88%, #58867E 100%);
+        background: var(--color-forum-gradient) !important;
         min-height: 100vh;
+        transition: background 0.3s ease;
     }
 
     .nav-sidebar-link {
@@ -157,21 +179,21 @@ if (!function_exists('time_elapsed_string')) {
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 0.82rem;
         font-weight: 700;
-        color: var(--color-text-muted);
-        background: rgba(21, 32, 30, 0.6);
-        border: 1px solid rgba(55, 77, 73, 0.4);
+        color: var(--color-text-muted) !important;
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
         border-radius: 50px; /* Pill shape */
         cursor: pointer;
         transition: all 0.25s;
     }
     .pf-tab-btn:hover {
-        background: rgba(55, 77, 73, 0.6);
-        color: #fff;
+        background: var(--color-border-dark) !important;
+        opacity: 0.9;
     }
     .pf-tab-btn.active {
-        background: var(--color-light-teal);
-        color: #fff;
-        border-color: var(--color-light-teal);
+        background: var(--color-light-teal) !important;
+        color: #fff !important;
+        border-color: var(--color-light-teal) !important;
         box-shadow: 0 4px 12px rgba(55,124,128,0.4);
     }
     .pf-tab-badge {
@@ -183,21 +205,22 @@ if (!function_exists('time_elapsed_string')) {
 
     /* ---------- CONTENT CARDS ---------- */
     .pf-card {
-        background: rgba(21, 32, 30, 0.8);
-        border: 1px solid rgba(55, 77, 73, 0.4);
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
         border-radius: 16px;
         padding: 18px;
         margin-bottom: 16px;
-        transition: transform 0.2s, border-color 0.2s;
+        box-shadow: var(--color-card-shadow);
+        transition: transform 0.2s, border-color 0.2s, background-color 0.3s, box-shadow 0.3s;
     }
     .pf-card:hover {
-        border-color: rgba(55, 124, 128, 0.5);
+        border-color: var(--color-light-teal) !important;
         transform: translateY(-2px);
     }
-    .pf-title { font-weight: 700; color: #fff; font-size: 0.95rem; margin-bottom: 6px; display: block; text-decoration: none; }
-    .pf-title:hover { color: var(--color-light-teal); }
-    .pf-body { font-size: 0.8rem; color: rgba(177,205,206,0.7); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
-    .pf-meta { font-size: 0.72rem; color: rgba(177,205,206,0.5); display: flex; gap: 12px; }
+    .pf-title { font-weight: 700; color: var(--color-text-main) !important; font-size: 0.95rem; margin-bottom: 6px; display: block; text-decoration: none; }
+    .pf-title:hover { color: var(--color-light-teal) !important; }
+    .pf-body { font-size: 0.8rem; color: var(--color-text-muted) !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
+    .pf-meta { font-size: 0.72rem; color: var(--color-text-muted) !important; opacity: 0.8; display: flex; gap: 12px; }
 
     /* ---------- MODAL (Drag & Drop + Grid Select) ---------- */
     .pf-modal-overlay {
@@ -208,37 +231,46 @@ if (!function_exists('time_elapsed_string')) {
     }
     .pf-modal-overlay.open { opacity: 1; pointer-events: all; }
     .pf-modal {
-        background: #1E2E2B; border: 1px solid #374D49; border-radius: 20px;
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
+        border-radius: 20px;
         width: 100%; max-width: 550px; margin: auto; padding: 24px;
         transform: scale(0.95); transition: transform 0.3s;
         max-height: 90vh; overflow-y: auto;
     }
     .pf-modal-overlay.open .pf-modal { transform: scale(1); }
     .pf-input {
-        width: 100%; background: rgba(13,19,20,0.8); border: 1px solid #374D49;
-        border-radius: 12px; color: #fff; font-size: 0.85rem; padding: 10px 14px;
-        margin-bottom: 16px; outline: none;
+        width: 100%;
+        background: var(--color-input-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
+        border-radius: 12px;
+        color: var(--color-text-main) !important;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        outline: none;
     }
-    .pf-input:focus { border-color: var(--color-light-teal); }
-    .pf-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .pf-input:focus { border-color: var(--color-light-teal) !important; }
+    .pf-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted) !important; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
     
     /* Drag & Drop Avatar */
     .avatar-drop-zone {
-        border: 2px dashed #374D49;
+        border: 2px dashed var(--color-border-dark) !important;
         border-radius: 16px;
         padding: 20px;
         text-align: center;
-        background: rgba(13,19,20,0.5);
+        background: var(--color-input-bg) !important;
         cursor: pointer;
         transition: all 0.2s;
         position: relative;
         margin-bottom: 16px;
     }
     .avatar-drop-zone:hover, .avatar-drop-zone.dragover {
-        border-color: var(--color-light-teal);
-        background: rgba(55,124,128,0.1);
+        border-color: var(--color-light-teal) !important;
+        background: rgba(55,124,128,0.1) !important;
     }
-    .avatar-preview-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid #374D49; }
+    .avatar-preview-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; display: block; border: 2px solid var(--color-border-dark) !important; }
+
 
     /* Grid Select Banner */
     .banner-grid {
@@ -272,6 +304,169 @@ if (!function_exists('time_elapsed_string')) {
     }
     .pf-save-btn { width: 100%; background: var(--color-light-teal); color: #fff; font-weight: 700; padding: 12px; border-radius: 50px; transition: opacity 0.2s; }
     .pf-save-btn:hover { opacity: 0.9; }
+
+    /* CSS Overrides for hardcoded Tailwind arbitrary backgrounds and text */
+    /* Prepended with .forum-container to increase CSS specificity over Tailwind CDN runtime styles */
+    .forum-container .bg-\[\#15201E\] {
+        background-color: var(--color-card-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#374D49\] {
+        background-color: var(--color-border-dark) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#374D49\]\/40:hover {
+        background-color: var(--color-border-dark) !important;
+        opacity: 0.8;
+    }
+    .forum-container .border-\[\#374D49\]\/50, 
+    .forum-container .border-\[\#374D49\]\/40, 
+    .forum-container .border-\[\#374D49\]\/30, 
+    .forum-container .border-\[\#374D49\]\/60 {
+        border-color: var(--color-border-dark) !important;
+        transition: border-color 0.3s ease;
+    }
+    .forum-container .text-\[\#B1CDCE\] {
+        color: var(--color-text-muted) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .text-\[\#B1CDCE\]\/50, 
+    .forum-container .text-\[\#B1CDCE\]\/70,
+    .forum-container .text-\[\#B1CDCE\]\/80,
+    .forum-container .text-\[\#B1CDCE\]\/60 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.75;
+    }
+    .forum-container .bg-\[\#0d1314\] {
+        background-color: var(--color-input-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#0d1314\]\/50 {
+        background-color: var(--color-input-bg) !important;
+        opacity: 0.85;
+    }
+    .forum-container .bg-white\/5 {
+        background-color: var(--color-chat-bubble-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#377C80\] {
+        background-color: var(--color-light-teal) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .text-\[\#377C80\] {
+        color: var(--color-light-teal) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .focus\:ring-\[\#377C80\]:focus {
+        --tw-ring-color: var(--color-light-teal) !important;
+    }
+    .forum-container h3, 
+    .forum-container h4, 
+    .forum-container h5, 
+    .forum-container h6 {
+        color: var(--color-text-main) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container input::placeholder, 
+    .forum-container textarea::placeholder {
+        color: var(--color-text-muted) !important;
+        opacity: 0.55 !important;
+    }
+
+    /* Specific Light Mode text overrides for opacity classes that default to white */
+    body[data-theme="light"] .forum-container .text-white {
+        color: var(--color-text-main) !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/20 {
+        color: var(--color-border-dark) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/30 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/40 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.65 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/50 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.8 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/60 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.9 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/80 {
+        color: var(--color-text-main) !important;
+        opacity: 0.9 !important;
+    }
+
+    /* Style chat contact cards to ensure borders are highly visible and solid */
+    #chatContactsList > div {
+        border: 1px solid var(--color-border-dark) !important;
+        background-color: var(--color-card-bg) !important;
+        transition: all 0.25s ease;
+    }
+
+    /* Floating Chat Widget Light Theme Overrides */
+    body[data-theme="light"] #floatingChatWidget {
+        background-color: #ffffff !important;
+        border: 2px solid #5c7c77 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .bg-\[\#1F3637\] {
+        background-color: #F8F9FA !important;
+        border-bottom: 2px solid #5c7c77 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget #chatMessagesBox {
+        background-color: #ffffff !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .bg-\[\#274D4F\] {
+        background-color: #F8F9FA !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .p-3.border-t.bg-\[\#1F3637\], 
+    body[data-theme="light"] #floatingChatWidget .p-3.border-t.border-teal-800\/30.bg-\[\#1F3637\] {
+        border-top: 2px solid #5c7c77 !important;
+        background-color: #F8F9FA !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .bg-\[\#1b3435\] {
+        background-color: #eef0ef !important;
+        border: 1.5px solid #8fa5a2 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .text-white {
+        color: #15201E !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .text-white\/40,
+    body[data-theme="light"] #floatingChatWidget .text-white\/30,
+    body[data-theme="light"] #floatingChatWidget .text-white\/50,
+    body[data-theme="light"] #floatingChatWidget .text-white\/60 {
+        color: #15201E !important;
+        opacity: 0.8 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .border-teal-800\/30,
+    body[data-theme="light"] #floatingChatWidget .border-teal-800\/50 {
+        border-color: #5c7c77 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget #chatMessageField {
+        background-color: #ffffff !important;
+        border: 1.5px solid #5c7c77 !important;
+        color: #15201E !important;
+    }
+    body[data-theme="light"] #floatingChatWidget input::placeholder {
+        color: #4b5e5b !important;
+        opacity: 0.65 !important;
+    }
+
+    /* Keep button text and icons dark on Gold accent buttons in Dark Mode */
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\] {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\] i {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\]:hover {
+        opacity: 0.9;
+    }
 </style>
 
 <div class="forum-container font-display pb-12">
@@ -515,30 +710,30 @@ if (!function_exists('time_elapsed_string')) {
                     <!-- RIGHT COLUMN: Popular News (Col-4) -->
                     <div class="lg:col-span-4">
                         <div class="sticky top-24">
-                            <h3 class="text-xs font-bold text-[#B1CDCE] uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <h3 class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest mb-4 flex items-center gap-2">
                                 <i class="bi bi-fire text-[#E49438] text-sm"></i> Berita Terpopuler
-                                <div class="flex-1 h-px bg-gradient-to-r from-[#377C80] to-transparent ml-2"></div>
+                                <div class="flex-1 h-px bg-gradient-to-r from-[var(--color-light-teal)] to-transparent ml-2"></div>
                             </h3>
                             
-                            <div class="bg-[#1E2E2B] border border-[#374D49] rounded-2xl p-4">
+                            <div class="bg-[var(--color-card-bg)] border border-[var(--color-border-dark)] rounded-2xl p-4 shadow-[var(--color-card-shadow)]">
                                 <?php if (!empty($most_viewed_news)): ?>
                                     <div class="space-y-3">
                                         <?php foreach ($most_viewed_news as $i => $mv): ?>
                                         <?php $mvThumb = !empty($mv['thumbnail']) && file_exists('./' . $mv['thumbnail']) ? $mv['thumbnail'] : 'assets/images/berita/berita1.png'; ?>
-                                        <a href="<?= base_url('berita/' . ($mv['slug'] ?? '')) ?>" class="flex gap-3 items-center group">
-                                            <div class="font-bold text-[#E49438] text-xs w-4"><?= $i+1 ?>.</div>
+                                        <a href="<?= base_url('berita/' . ($mv['slug'] ?? '')) ?>" class="flex gap-3 items-center group no-underline">
+                                            <div class="font-bold text-[var(--color-light-teal)] text-xs w-4"><?= $i+1 ?>.</div>
                                             <div class="w-12 h-12 rounded-lg overflow-hidden shrink-0">
                                                 <img src="<?= base_url($mvThumb) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform">
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <div class="text-xs font-bold text-white line-clamp-2 leading-tight group-hover:text-[#377C80] transition-colors mb-1"><?= htmlspecialchars($mv['title']) ?></div>
-                                                <div class="text-[10px] text-[#B1CDCE]/60"><i class="bi bi-eye"></i> <?= number_format($mv['views'] ?? 0) ?> views</div>
+                                                <div class="text-xs font-bold text-[var(--color-text-main)] line-clamp-2 leading-tight group-hover:text-[var(--color-light-teal)] transition-colors mb-1"><?= htmlspecialchars($mv['title']) ?></div>
+                                                <div class="text-[10px] text-[var(--color-text-muted)]"><i class="bi bi-eye"></i> <?= number_format($mv['views'] ?? 0) ?> views</div>
                                             </div>
                                         </a>
                                         <?php endforeach; ?>
                                     </div>
                                 <?php else: ?>
-                                    <div class="text-center py-6 text-[#B1CDCE]/40 text-xs">Belum ada data.</div>
+                                    <div class="text-center py-6 text-[var(--color-text-muted)] opacity-60 text-xs">Belum ada data.</div>
                                 <?php endif; ?>
                             </div>
                         </div>

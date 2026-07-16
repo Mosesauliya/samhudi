@@ -27,21 +27,43 @@ if (!function_exists('time_elapsed_string')) {
 
 <style>
     :root {
-        --color-bg-dark: #15201E;
-        --color-border-dark: #374D49;
-        --color-light-teal: #377C80;
+        --color-bg-dark: #F8F9FA;
+        --color-border-dark: #8fa5a2;
+        --color-light-teal: #274D4F;
         --color-orange-accent: #E49438;
+        --color-text-muted: #4b5e5b;
+        --color-text-main: #15201E;
+        --color-card-bg: #ffffff;
+        --color-input-bg: #F8F9FA;
+        --color-chat-bubble-bg: #eef0ef;
+        --color-forum-gradient: #F8F9FA;
+        --color-card-shadow: 0 6px 24px rgba(39, 77, 79, 0.08);
+    }
+    
+    body[data-theme="dark"] {
+        --color-bg-dark: #0F211F;
+        --color-border-dark: #22443F;
+        --color-light-teal: #C8A84E;
+        --color-orange-accent: #C8A84E;
         --color-text-muted: #B1CDCE;
+        --color-text-main: #FFFFFF;
+        --color-card-bg: #1B3835;
+        --color-input-bg: #0d1314;
+        --color-chat-bubble-bg: rgba(255, 255, 255, 0.05);
+        --color-forum-gradient: #0F211F;
+        --color-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     }
     
     body {
         background-color: var(--color-bg-dark) !important;
-        color: #FFFFFF;
+        color: var(--color-text-main) !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .linkedin-container {
-        background: linear-gradient(135deg, #15201E 0%, #41635D 88%, #58867E 100%);
+        background: var(--color-forum-gradient) !important;
         min-height: 100vh;
+        transition: background 0.3s ease;
     }
 
     .nav-sidebar-link {
@@ -59,16 +81,16 @@ if (!function_exists('time_elapsed_string')) {
     .tab-btn {
         padding: 12px 24px;
         font-weight: bold;
-        color: var(--color-text-muted);
+        color: var(--color-text-muted) !important;
         border-bottom: 2px solid transparent;
         transition: all 0.2s;
     }
     .tab-btn:hover {
-        color: #fff;
+        color: var(--color-text-main) !important;
     }
     .tab-btn.active {
-        color: var(--color-orange-accent);
-        border-bottom-color: var(--color-orange-accent);
+        color: var(--color-orange-accent) !important;
+        border-bottom-color: var(--color-orange-accent) !important;
     }
 
     /* Modals */
@@ -79,29 +101,39 @@ if (!function_exists('time_elapsed_string')) {
     }
     .modal-overlay.open { display: flex; }
     .modal-content {
-        background: #1E2E2B; border: 1px solid #374D49; border-radius: 20px;
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
+        border-radius: 20px;
         width: 100%; max-width: 600px; margin: auto; padding: 24px;
         max-height: 90vh; overflow-y: auto;
+        box-shadow: var(--color-card-shadow) !important;
     }
 
     /* Forms */
     .form-input {
-        width: 100%; background: rgba(13,19,20,0.8); border: 1px solid #374D49;
-        border-radius: 12px; color: #fff; font-size: 0.85rem; padding: 10px 14px;
-        margin-bottom: 16px; outline: none; transition: border-color 0.2s;
+        width: 100%;
+        background: var(--color-input-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
+        border-radius: 12px;
+        color: var(--color-text-main) !important;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+        outline: none;
+        transition: border-color 0.2s, background-color 0.3s;
     }
-    .form-input:focus { border-color: var(--color-light-teal); }
-    .form-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-input:focus { border-color: var(--color-light-teal) !important; }
+    .form-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-text-muted) !important; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
     
     .form-input[readonly] {
-        background: rgba(0,0,0,0.2);
-        color: #B1CDCE;
+        background: rgba(0,0,0,0.05) !important;
+        color: var(--color-text-muted) !important;
         cursor: not-allowed;
     }
 
     .btn-primary {
         background: var(--color-orange-accent);
-        color: white;
+        color: white !important;
         padding: 10px 24px;
         border-radius: 50px;
         font-weight: bold;
@@ -153,50 +185,166 @@ if (!function_exists('time_elapsed_string')) {
     .job-detail-panel {
         width: 400px;
         flex-shrink: 0;
-        background: #1E2E2B;
-        border: 1px solid #374D49;
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
         border-radius: 16px;
         display: none;
         flex-direction: column;
         overflow: hidden;
+        box-shadow: var(--color-card-shadow) !important;
     }
     .job-detail-panel.active {
         display: flex;
     }
     .job-item {
-        background: rgba(21, 32, 30, 0.8);
-        border: 1px solid rgba(55, 77, 73, 0.4);
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
         border-radius: 12px;
         padding: 16px;
         margin-bottom: 12px;
         cursor: pointer;
+        box-shadow: var(--color-card-shadow) !important;
         transition: all 0.2s;
     }
     .job-item:hover, .job-item.active {
-        border-color: var(--color-light-teal);
-        background: rgba(55, 124, 128, 0.1);
+        border-color: var(--color-light-teal) !important;
+        background: var(--color-chat-bubble-bg) !important;
     }
 
     /* Worker Card */
     .worker-card {
-        background: rgba(21, 32, 30, 0.8);
-        border: 1px solid rgba(55, 77, 73, 0.4);
+        background: var(--color-card-bg) !important;
+        border: 1px solid var(--color-border-dark) !important;
         border-radius: 16px;
         padding: 20px;
         display: flex;
         align-items: center;
         gap: 16px;
+        box-shadow: var(--color-card-shadow) !important;
         transition: all 0.2s;
         cursor: pointer;
     }
     .worker-card:hover {
         transform: translateY(-2px);
-        border-color: var(--color-light-teal);
+        border-color: var(--color-light-teal) !important;
         background: rgba(55, 124, 128, 0.08);
     }
     .worker-avatar {
         width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
         border: 2px solid var(--color-light-teal);
+    }
+
+    /* CSS Overrides for hardcoded Tailwind arbitrary backgrounds and text */
+    /* Prepended with .linkedin-container to increase CSS specificity over Tailwind CDN runtime styles */
+    .linkedin-container .bg-\[\#15201E\] {
+        background-color: var(--color-card-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .linkedin-container .bg-\[\#1E2E2B\] {
+        background-color: var(--color-card-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .linkedin-container .bg-\[\#374D49\] {
+        background-color: var(--color-border-dark) !important;
+        transition: background-color 0.3s ease;
+    }
+    .linkedin-container .bg-\[\#374D49\]\/40:hover {
+        background-color: var(--color-border-dark) !important;
+        opacity: 0.8;
+    }
+    .linkedin-container .border-\[\#374D49\]\/50, 
+    .linkedin-container .border-\[\#374D49\]\/40, 
+    .linkedin-container .border-\[\#374D49\]\/30, 
+    .linkedin-container .border-\[\#374D49\] {
+        border-color: var(--color-border-dark) !important;
+        transition: border-color 0.3s ease;
+    }
+    .linkedin-container .text-\[\#B1CDCE\] {
+        color: var(--color-text-muted) !important;
+        transition: color 0.3s ease;
+    }
+    .linkedin-container .text-\[\#B1CDCE\]\/50, 
+    .linkedin-container .text-\[\#B1CDCE\]\/70,
+    .linkedin-container .text-\[\#B1CDCE\]\/80,
+    .linkedin-container .text-\[\#B1CDCE\]\/60 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.75;
+    }
+    .linkedin-container .bg-\[\#0d1314\] {
+        background-color: var(--color-input-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .linkedin-container .bg-\[\#0d1314\]\/50 {
+        background-color: var(--color-input-bg) !important;
+        opacity: 0.85;
+    }
+    .linkedin-container .bg-white\/5 {
+        background-color: var(--color-chat-bubble-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .linkedin-container .bg-\[\#377C80\] {
+        background-color: var(--color-light-teal) !important;
+        transition: background-color 0.3s ease;
+    }
+    .linkedin-container .text-\[\#377C80\] {
+        color: var(--color-light-teal) !important;
+        transition: color 0.3s ease;
+    }
+    .linkedin-container .focus\:ring-\[\#377C80\]:focus {
+        --tw-ring-color: var(--color-light-teal) !important;
+    }
+    .linkedin-container h3, 
+    .linkedin-container h4, 
+    .linkedin-container h5, 
+    .linkedin-container h6,
+    .linkedin-container .text-white {
+        color: var(--color-text-main) !important;
+        transition: color 0.3s ease;
+    }
+    .linkedin-container input::placeholder, 
+    .linkedin-container textarea::placeholder {
+        color: var(--color-text-muted) !important;
+        opacity: 0.55 !important;
+    }
+
+    /* Specific Light Mode text overrides for opacity classes that default to white */
+    body[data-theme="light"] .linkedin-container .text-white {
+        color: var(--color-text-main) !important;
+    }
+    body[data-theme="light"] .linkedin-container .text-white\/20 {
+        color: var(--color-border-dark) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .linkedin-container .text-white\/30 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .linkedin-container .text-white\/40 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.65 !important;
+    }
+    body[data-theme="light"] .linkedin-container .text-white\/50 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.8 !important;
+    }
+    body[data-theme="light"] .linkedin-container .text-white\/60 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.9 !important;
+    }
+    body[data-theme="light"] .linkedin-container .text-white\/80 {
+        color: var(--color-text-main) !important;
+        opacity: 0.9 !important;
+    }
+
+    /* Keep button text and icons dark on Gold accent buttons in Dark Mode */
+    body[data-theme="dark"] .linkedin-container .bg-\[\#377C80\] {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .linkedin-container .bg-\[\#377C80\] i {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .linkedin-container .bg-\[\#377C80\]:hover {
+        opacity: 0.9;
     }
 
     /* OTW Avatar in modal */

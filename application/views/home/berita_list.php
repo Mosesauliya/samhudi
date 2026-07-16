@@ -9,23 +9,54 @@
  */
 ?>
 <style>
-/* ===== DARK THEME — mirroring Forum Diskusi ===== */
+/* ===== THEME ADAPTING VARIABLES ===== */
 :root {
-    --bl-bg:       #15201E;
-    --bl-surface:  #1E2E2B;
-    --bl-border:   rgba(55,77,73,0.45);
-    --bl-teal:     #377C80;
-    --bl-orange:   #E49438;
-    --bl-muted:    #B1CDCE;
-    --bl-white:    #FFFFFF;
+    --bl-bg:           #fdfcfa;
+    --bl-surface:      #ffffff;
+    --bl-border:       rgba(39, 77, 79, 0.16);
+    --bl-teal:         #274D4F;
+    --bl-orange:       #E49438;
+    --bl-muted:        #4b382f;
+    --bl-white:        #1a202c;
+    --bl-hero-bg:      #274D4F;
+    /* hero text always on dark bg — always light */
+    --bl-hero-title:   #ffffff;
+    --bl-hero-muted:   rgba(200, 225, 225, 0.85);
+    --bl-card-title:   #1a202c;
+    --bl-card-text:    #4b382f;
+    --bl-card-shadow:  0 6px 20px rgba(39, 77, 79, 0.08);
+}
+
+body[data-theme="dark"] {
+    --bl-bg:           #15201E;
+    --bl-surface:      #1E2E2B;
+    --bl-border:       rgba(55,77,73,0.45);
+    --bl-teal:         #377C80;
+    --bl-orange:       #E49438;
+    --bl-muted:        #B1CDCE;
+    --bl-white:        #FFFFFF;
+    --bl-hero-bg:      linear-gradient(135deg, #0d1614 0%, #15201E 40%, #1E3631 80%, #2a4a42 100%);
+    --bl-hero-title:   #ffffff;
+    --bl-hero-muted:   #B1CDCE;
+    --bl-card-title:   #ffffff;
+    --bl-card-text:    #B1CDCE;
+    --bl-card-shadow:  0 8px 30px rgba(0,0,0,0.35);
 }
 
 /* Override body background for this page */
-body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
+body { 
+    background-color: var(--bl-bg) !important; 
+    color: var(--bl-white); 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.bl-section, .bl-card, .bl-card-title, .bl-hero, .bl-hero h1, .bl-hero p {
+    transition: background-color 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
 /* ---------- HERO ---------- */
 .bl-hero {
-    background: linear-gradient(135deg, #0d1614 0%, #15201E 40%, #1E3631 80%, #2a4a42 100%);
+    background: var(--bl-hero-bg);
     padding: 70px 0 50px;
     position: relative;
     overflow: hidden;
@@ -69,13 +100,13 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 2.6rem;
     font-weight: 800;
-    color: var(--bl-white);
+    color: var(--bl-hero-title);
     margin-bottom: 10px;
     position: relative;
     z-index: 1;
 }
 .bl-hero p {
-    color: var(--bl-muted);
+    color: var(--bl-hero-muted);
     font-size: 0.95rem;
     position: relative;
     z-index: 1;
@@ -113,11 +144,12 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-shadow: var(--bl-card-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .bl-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    box-shadow: 0 16px 48px rgba(39,77,79,0.18);
     border-color: rgba(55,124,128,0.5);
 }
 .bl-card-img {
@@ -159,7 +191,7 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     align-items: center;
     gap: 8px;
     font-size: 0.73rem;
-    color: var(--bl-muted);
+    color: var(--bl-card-text);
     margin-bottom: 10px;
 }
 .bl-card-meta .dot {
@@ -172,13 +204,13 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 1rem;
     font-weight: 700;
-    color: var(--bl-white);
+    color: var(--bl-card-title);
     margin-bottom: 8px;
     line-height: 1.45;
     flex: 1;
 }
 .bl-card-title a {
-    color: var(--bl-white);
+    color: var(--bl-card-title);
     text-decoration: none;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -189,7 +221,7 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
 .bl-card-title a:hover { color: var(--bl-teal); }
 .bl-card-excerpt {
     font-size: 0.8rem;
-    color: rgba(177,205,206,0.7);
+    color: var(--bl-card-text);
     line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -215,10 +247,10 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
 .bl-empty {
     text-align: center;
     padding: 70px 20px;
-    color: rgba(177,205,206,0.5);
+    color: var(--bl-card-text);
 }
-.bl-empty i { font-size: 3rem; margin-bottom: 14px; display: block; }
-.bl-empty h4 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--bl-muted); }
+.bl-empty i { font-size: 3rem; margin-bottom: 14px; display: block; color: var(--bl-card-text); opacity: 0.5; }
+.bl-empty h4 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--bl-card-title); }
 
 /* ---------- PAGINATION (dark) ---------- */
 .custom-pagination { gap: 5px; }
@@ -246,11 +278,11 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
 .bl-page-info {
     text-align: center;
     font-size: 0.78rem;
-    color: rgba(177,205,206,0.55);
+    color: var(--bl-card-text);
     margin-bottom: 8px;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.bl-page-info strong { color: var(--bl-muted); }
+.bl-page-info strong { color: var(--bl-card-title); }
 
 /* ---------- SIDEBAR ---------- */
 .bl-sidebar { position: sticky; top: 90px; }
@@ -258,7 +290,7 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 0.78rem;
     font-weight: 800;
-    color: var(--bl-muted);
+    color: var(--bl-card-title);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 16px;
@@ -277,6 +309,7 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     border: 1px solid var(--bl-border);
     border-radius: 18px;
     padding: 16px;
+    box-shadow: var(--bl-card-shadow);
 }
 .bl-sidebar-item {
     display: flex;
@@ -306,7 +339,7 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--bl-white);
+    color: var(--bl-card-title);
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -316,7 +349,7 @@ body { background-color: var(--bl-bg) !important; color: var(--bl-white); }
 }
 .bl-sidebar-item .sinfo .sdate {
     font-size: 0.7rem;
-    color: rgba(177,205,206,0.55);
+    color: var(--bl-card-text);
     display: flex;
     align-items: center;
     gap: 5px;

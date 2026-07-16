@@ -123,8 +123,8 @@ body {
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 6px 24px rgba(39, 77, 79, 0.08);
+  border: 1px solid rgba(39, 77, 79, 0.16);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -292,4 +292,70 @@ body {
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* --- THEME TRANSITIONS & DARK MODE OVERRIDES --- */
+body, .intro-text, .wasiat-card, .card-number, .card-title, .card-text, .modal-box, .modal-title, .modal-text {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body[data-theme="dark"] {
+  background-color: #0F211F;
+  color: #e8ddd4;
+}
+
+[data-theme="dark"] .intro-text {
+  color: #e8ddd4;
+}
+
+[data-theme="dark"] .divider .line {
+  background-color: #22443F;
+}
+
+[data-theme="dark"] .wasiat-card {
+  background: #1B3835;
+  border-color: #22443F;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .card-number {
+  background-color: #C8A84E;
+  color: #0F211F;
+}
+
+[data-theme="dark"] .card-title {
+  color: #C8A84E;
+}
+
+[data-theme="dark"] .card-text {
+  color: #e8ddd4;
+}
+
+[data-theme="dark"] .btn-selengkapnya {
+  color: #C8A84E;
+}
+
+[data-theme="dark"] .btn-selengkapnya:hover {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .modal-box {
+  background-color: #1B3835;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] .modal-title {
+  color: #C8A84E;
+}
+
+[data-theme="dark"] .modal-text {
+  color: #e8ddd4;
+}
+
+[data-theme="dark"] .modal-close {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .modal-close:hover {
+  color: #ffffff;
 }

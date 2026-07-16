@@ -1,5 +1,5 @@
 <?php $is_home = !$this->uri->segment(1); ?>
-<nav class="bg-[#274d4f] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)]">
+<nav class="navbar-custom bg-[#274d4f] shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)]">
     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-x-16">
 
         <div class="font-display font-bold text-lg tracking-tight leading-none flex items-center gap-2" style="color: #C8A84E;">
@@ -48,29 +48,32 @@
         </ul>
 
         <!-- Desktop Login -->
-        <div class="hidden md:flex items-center">
+        <div class="hidden md:flex items-center gap-5">
+            <button id="theme-toggle" class="text-white hover:text-gray-300 focus:outline-none p-2 rounded-full hover:bg-white/10 transition-colors" title="Toggle Tema">
+                <i id="theme-icon" class="bi bi-moon-stars text-xl"></i>
+            </button>
             <?php if ($this->session->userdata('logged_in')): ?>
             <div id="desktop-user-menu" class="relative cursor-pointer select-none group">
-                <div class="flex items-center gap-4 bg-white hover:bg-gray-100 px-5 py-2.5 rounded-full transition-all duration-200">
-                    <i class="bi bi-person-fill text-[#274d4f] text-base"></i>
-                    <span class="font-display font-semibold text-sm text-[#274d4f]">
+                <div id="user-pill" class="flex items-center gap-4 bg-white hover:bg-gray-100 px-5 py-2.5 rounded-full transition-all duration-200">
+                    <i id="user-pill-icon" class="bi bi-person-fill text-[#274d4f] text-base"></i>
+                    <span id="user-pill-text" class="font-display font-semibold text-sm text-[#274d4f]">
                         <?= $this->session->userdata('full_name') ?>
                     </span>
                 </div>
-                <div id="desktop-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="opacity:0;visibility:hidden;transform:translateY(8px);transition:all 0.2s ease;z-index:9999;">
+                <div id="desktop-dropdown" class="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden" style="opacity:0;visibility:hidden;transform:translateY(8px);transition:all 0.2s ease;z-index:9999;">
                     <?php if (in_array($this->session->userdata('role'), ['admin', 'super_admin'])): ?>
-                    <a href="<?= base_url('admin') ?>" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors font-display font-medium no-underline">
-                        <i class="bi bi-speedometer2 text-teal-700"></i>
+                    <a href="<?= base_url('admin') ?>" class="dd-item flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors font-display font-medium no-underline">
+                        <span class="dd-icon"><i class="bi bi-speedometer2"></i></span>
                         Dashboard
                     </a>
                     <?php endif; ?>
-                    <a href="<?= base_url('profile') ?>" class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors font-display font-medium no-underline">
-                        <i class="bi bi-pencil-square text-teal-700"></i>
+                    <a href="<?= base_url('profile') ?>" class="dd-item flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors font-display font-medium no-underline">
+                        <span class="dd-icon"><i class="bi bi-pencil-square"></i></span>
                         Edit Profil
                     </a>
                     <hr class="border-gray-200 m-0">
-                    <a href="<?= base_url('auth/logout') ?>" class="flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors font-display font-medium no-underline">
-                        <i class="bi bi-box-arrow-right"></i>
+                    <a href="<?= base_url('auth/logout') ?>" class="dd-item flex items-center gap-3 px-5 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors font-display font-medium no-underline">
+                        <span class="dd-icon"><i class="bi bi-box-arrow-right"></i></span>
                         Logout
                     </a>
                 </div>
@@ -82,10 +85,15 @@
             <?php endif; ?>
         </div>
 
-        <!-- Mobile Button -->
-        <button id="menu-btn" class="block md:hidden text-3xl text-white focus:outline-none">
-            ☰
-        </button>
+        <!-- Mobile Actions -->
+        <div class="flex md:hidden items-center gap-2">
+            <button id="theme-toggle-mobile" class="text-white hover:text-gray-300 focus:outline-none p-2 rounded-full hover:bg-white/10 transition-colors" title="Toggle Tema">
+                <i id="theme-icon-mobile" class="bi bi-moon-stars text-xl"></i>
+            </button>
+            <button id="menu-btn" class="text-3xl text-white focus:outline-none ml-1">
+                ☰
+            </button>
+        </div>
 
     </div>
 
@@ -114,22 +122,22 @@
 
         <ul class="font-display font-semibold text-base tracking-wide text-white/80 space-y-4 p-6 pl-2 flex-1">
             <li>
-                <a href="<?= base_url() ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="home"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-house mr-2"></i><?php endif; ?>Home</a>
+                <a href="<?= base_url() ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="home"><span class="arrow-icon" style="display:none;margin-right:8px;">&gt;</span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-house mr-2"></i><?php endif; ?>Home</a>
             </li>
             <li>
-                <a href="<?= base_url('Wasiat') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="wasiat"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-book mr-2"></i><?php endif; ?>Wasiat alm. H.M Samhudi</a>
+                <a href="<?= base_url('Wasiat') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="wasiat"><span class="arrow-icon" style="display:none;margin-right:8px;">&gt;</span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-book mr-2"></i><?php endif; ?>Wasiat alm. H.M Samhudi</a>
             </li>
             <li>
-                <a href="#" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="yayasan"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-house-heart mr-2"></i><?php endif; ?>Yayasan</a>
+                <a href="#" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="yayasan"><span class="arrow-icon" style="display:none;margin-right:8px;">&gt;</span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-house-heart mr-2"></i><?php endif; ?>Yayasan</a>
             </li>
             <li>
-                <a href="<?= base_url('Familytree') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="familytree"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-people mr-2"></i><?php endif; ?>Silsilah Keluarga</a>
+                <a href="<?= base_url('Familytree') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="familytree"><span class="arrow-icon" style="display:none;margin-right:8px;">&gt;</span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-people mr-2"></i><?php endif; ?>Silsilah Keluarga</a>
             </li>
             <li>
-                <a href="<?= base_url('forum') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="forum"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-chat-dots mr-2"></i><?php endif; ?>Forum Diskusi</a>
+                <a href="<?= base_url('forum') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="forum"><span class="arrow-icon" style="display:none;margin-right:8px;">&gt;</span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-chat-dots mr-2"></i><?php endif; ?>Forum Diskusi</a>
             </li>
             <li>
-                <a href="<?= base_url('Berita') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="berita"><span class="arrow-icon inline-block -ml-5 mr-2 opacity-0 -translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0">></span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-newspaper mr-2"></i><?php endif; ?>Berita</a>
+                <a href="<?= base_url('Berita') ?>" class="mobile-link group block py-2 pl-8 hover:text-white transition-colors duration-200" data-page="berita"><span class="arrow-icon" style="display:none;margin-right:8px;">&gt;</span><?php if ($this->session->userdata('logged_in')): ?><i class="bi bi-newspaper mr-2"></i><?php endif; ?>Berita</a>
             </li>
         <?php if (!$this->session->userdata('logged_in')): ?>
             <li class="px-6 pt-2">
@@ -149,10 +157,89 @@
 </nav>
 
 <style>
+/* Fixed-width icon wrapper to keep all dropdown icons perfectly aligned */
+.dd-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
 #desktop-user-menu:hover #desktop-dropdown {
     opacity: 1 !important;
     visibility: visible !important;
     transform: translateY(0) !important;
+}
+
+/* Enforce dropdown styles - Dark Mode */
+body[data-theme="dark"] #desktop-dropdown {
+    background-color: rgba(255,255,255,0.1) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+body[data-theme="dark"] #desktop-dropdown a {
+    color: #ffffff !important;
+}
+body[data-theme="dark"] #desktop-dropdown a:hover {
+    background-color: rgba(255,255,255,0.12) !important;
+}
+body[data-theme="dark"] #desktop-dropdown i {
+    color: #C8A84E !important;
+}
+body[data-theme="dark"] #desktop-dropdown hr {
+    border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* Enforce dropdown styles - Light Mode (match white user pill) */
+body:not([data-theme="dark"]) #desktop-dropdown {
+    background-color: #ffffff !important;
+    border-color: rgba(39,77,79,0.12) !important;
+    box-shadow: 0 10px 30px rgba(39,77,79,0.15) !important;
+}
+body:not([data-theme="dark"]) #desktop-dropdown a {
+    color: #274D4F !important;
+}
+body:not([data-theme="dark"]) #desktop-dropdown a:hover {
+    background-color: #f3f4f6 !important;
+}
+body:not([data-theme="dark"]) #desktop-dropdown i {
+    color: #274D4F !important;
+}
+body:not([data-theme="dark"]) #desktop-dropdown a.text-red-600 {
+    color: #dc2626 !important;
+}
+body:not([data-theme="dark"]) #desktop-dropdown a.text-red-600:hover {
+    background-color: #fef2f2 !important;
+}
+body:not([data-theme="dark"]) #desktop-dropdown hr {
+    border-color: rgba(39,77,79,0.12) !important;
+}
+
+/* User pill - Light Mode: white bg, teal text (same as default) */
+body:not([data-theme="dark"]) #user-pill {
+    background-color: #ffffff !important;
+}
+body:not([data-theme="dark"]) #user-pill:hover {
+    background-color: #f3f4f6 !important;
+}
+body:not([data-theme="dark"]) #user-pill-icon,
+body:not([data-theme="dark"]) #user-pill-text {
+    color: #274D4F !important;
+}
+
+/* User pill - Dark Mode: teal-dark bg, white text */
+body[data-theme="dark"] #user-pill {
+    background-color: rgba(255,255,255,0.1) !important;
+}
+body[data-theme="dark"] #user-pill:hover {
+    background-color: rgba(255,255,255,0.18) !important;
+}
+body[data-theme="dark"] #user-pill-icon,
+body[data-theme="dark"] #user-pill-text {
+    color: #ffffff !important;
 }
 </style>
 
@@ -182,16 +269,29 @@ menuBtn.addEventListener('click', openSidebar);
 closeBtn.addEventListener('click', closeSidebar);
 overlay.addEventListener('click', closeSidebar);
 
-// Active page indicator
+// Active page indicator — uses inline style, no Tailwind dependency
 const currentPath = window.location.pathname.replace(/\/$/, '').toLowerCase();
 const mobileLinks = document.querySelectorAll('.mobile-link');
+const basePath = '<?= rtrim(base_url(), '/') ?>'.replace(/^https?:\/\/[^\/]+/, '').replace(/\/$/, '').toLowerCase();
+
 mobileLinks.forEach(link => {
     if (link.getAttribute('href') === '#') return;
-    const linkPath = link.pathname.replace(/\/$/, '').toLowerCase();
     const arrow = link.querySelector('.arrow-icon');
-    if (currentPath === linkPath || currentPath.endsWith(linkPath)) {
-        arrow.classList.remove('opacity-0', '-translate-x-2');
-        arrow.classList.add('opacity-100', 'translate-x-0');
+    if (!arrow) return;
+    
+    const page = link.getAttribute('data-page');
+    let isActive = false;
+    
+    if (page === 'home') {
+        // Home only active on exact base path
+        isActive = (currentPath === basePath || currentPath === basePath + '/index.php' || currentPath === '');
+    } else {
+        // Other pages: check if current path contains the page keyword
+        isActive = currentPath.indexOf('/' + page) !== -1;
+    }
+    
+    if (isActive) {
+        arrow.style.display = 'inline-block';
         link.style.color = 'white';
     }
 });

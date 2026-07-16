@@ -81,7 +81,38 @@
         });
     </script>
 
+<script>
+        // Theme Toggle Functionality
+        (function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeIconMobile = document.getElementById('theme-icon-mobile');
+            
+            // Apply saved theme on load
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+            updateIcons(savedTheme);
+            
+            function updateIcons(theme) {
+                const iconClass = theme === 'dark' ? 'bi-moon-stars' : 'bi-sun-fill';
+                if (themeIcon) themeIcon.className = 'bi ' + iconClass + ' text-xl';
+                if (themeIconMobile) themeIconMobile.className = 'bi ' + iconClass + ' text-lg';
+            }
+            
+            function toggleTheme() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcons(newTheme);
+            }
+            
+            if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+            if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+        })();
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

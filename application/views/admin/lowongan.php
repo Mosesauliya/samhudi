@@ -98,7 +98,7 @@
                     <p class="text-xs md:text-sm text-teal-400 mt-1">Verifikasi dan kelola semua lowongan pekerjaan yang diajukan anggota.</p>
                 </div>
                 <button onclick="openModal('addJobModal')"
-                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-gold-400 hover:bg-gold-500 text-teal-950 font-display font-bold rounded-xl shadow-lg transition-all active:scale-95 text-sm whitespace-nowrap">
+                        class="btn-admin-primary inline-flex items-center gap-2 px-5 py-2.5 font-display font-bold rounded-xl shadow-lg transition-all active:scale-95 text-sm whitespace-nowrap">
                     <i class="bi bi-plus-lg"></i>
                     Tambah Lowongan
                 </button>
@@ -322,7 +322,7 @@
                     <div class="flex justify-end gap-3 pt-2">
                         <button type="button" onclick="closeModal('addJobModal')" class="px-4 py-2 text-sm text-white/60 hover:text-white transition-colors">Batal</button>
                         <button type="submit"
-                                class="px-6 py-2.5 bg-gold-400 hover:bg-gold-500 text-teal-950 font-display font-bold rounded-xl text-sm shadow-lg transition-all active:scale-95">
+                                class="btn-admin-primary px-6 py-2.5 font-display font-bold rounded-xl text-sm shadow-lg transition-all active:scale-95">
                             <i class="bi bi-plus-lg mr-1"></i> Simpan Lowongan
                         </button>
                     </div>

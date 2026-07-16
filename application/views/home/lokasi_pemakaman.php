@@ -64,7 +64,7 @@ $maps_dir_url = 'https://www.google.com/maps/dir//' . urlencode($makam_address);
                                     <a href="<?= htmlspecialchars($maps_search_url) ?>" target="_blank" rel="noopener noreferrer" class="makam-link">
                                         <i class="bi bi-geo-alt-fill"></i> Lihat Detail
                                     </a>
-                                    <a href="<?= htmlspecialchars($maps_dir_url) ?>" target="_blank" rel="noopener noreferrer" class="makam-link makam-link-outline">
+                                    <a href="<?= htmlspecialchars($maps_dir_url) ?>" target="_blank" rel="noopener noreferrer" class="makam-link">
                                         <i class="bi bi-signpost-2-fill"></i> Rute
                                     </a>
                                 </div>

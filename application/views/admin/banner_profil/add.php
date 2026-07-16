@@ -11,11 +11,20 @@
             theme: {
                 extend: {
                     colors: {
+                        teal: {
+                            950: '#15201E',
+                            900: '#1D2A27',
+                            800: '#273834',
+                            700: '#324742',
+                            600: '#435E59',
+                            500: '#5F7F7A',
+                            400: '#8DAAA4',
+                        },
                         brand: {
-                            dark: '#15201E',
-                            medium: '#2E564F',
-                            light: '#E49438',
-                            accent: '#377C80'
+                            dark: '#374D49',
+                            medium: '#4D6B67',
+                            light: '#E3E3E3',
+                            red: '#E14343',
                         }
                     },
                     fontFamily: {
@@ -30,24 +39,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-teal-950 text-white font-sans">
     
     <div class="flex min-h-screen">
         <!-- Sidebar -->
         <?php $this->load->view('admin/sidebar', ['active_menu' => 'banner_profil']); ?>
 
         <!-- Main Content -->
-        <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <main class="flex-1 flex flex-col overflow-y-auto">
             <!-- Header -->
-            <header class="bg-white border-b border-gray-200 px-8 py-5 flex items-center justify-between shrink-0 sticky top-0 z-10">
-                <div class="flex items-center gap-3">
-                    <a href="<?= base_url('admin/banner_profil') ?>" class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 transition-colors">
-                        <i class="bi bi-arrow-left text-xl"></i>
-                    </a>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-900 font-display">Tambah Banner Profil</h1>
-                        <p class="text-sm text-gray-500">Upload banner baru untuk profil user</p>
+            <header class="h-20 bg-gradient-to-r from-[#374D49] to-[#3E6C65] border-b border-[#4D6B67]/30 flex items-center justify-between px-4 md:px-8 shrink-0 shadow-md">
+                <div class="flex items-center gap-4">
+                    <button onclick="document.getElementById('adminSidebar').classList.remove('-translate-x-full');" class="md:hidden text-white/80 hover:text-white p-1">
+                        <i class="bi bi-list text-2xl"></i>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <a href="<?= base_url('admin/banner_profil') ?>" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors">
+                            <i class="bi bi-arrow-left text-xl"></i>
+                        </a>
+                        <div>
+                            <h1 class="font-display font-bold text-lg text-white">Tambah Banner Profil</h1>
+                            <p class="text-xs text-white/80 mt-0.5">Upload banner baru untuk profil user</p>
+                        </div>
                     </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle" class="text-white hover:text-gray-300 focus:outline-none p-2 rounded-full hover:bg-white/10 transition-colors" title="Toggle Tema">
+                        <i id="theme-icon" class="bi bi-moon-stars text-base"></i>
+                    </button>
                 </div>
             </header>
 

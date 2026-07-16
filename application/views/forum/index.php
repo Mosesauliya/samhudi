@@ -12,21 +12,41 @@
 <style>
     /* Color Palette matching premium mockup and Figma stops */
     :root {
-        --color-bg-dark: #15201E;
-        --color-border-dark: #374D49;
-        --color-light-teal: #377C80;
+        --color-bg-dark: #F8F9FA;
+        --color-border-dark: #8fa5a2;
+        --color-light-teal: #274D4F;
         --color-orange-accent: #E49438;
+        --color-text-muted: #4b5e5b;
+        --color-text-main: #15201E;
+        --color-card-bg: #ffffff;
+        --color-input-bg: #F8F9FA;
+        --color-chat-bubble-bg: #eef0ef;
+        --color-forum-gradient: #F8F9FA;
+    }
+    
+    body[data-theme="dark"] {
+        --color-bg-dark: #0F211F;
+        --color-border-dark: #22443F;
+        --color-light-teal: #C8A84E;
+        --color-orange-accent: #C8A84E;
         --color-text-muted: #B1CDCE;
+        --color-text-main: #FFFFFF;
+        --color-card-bg: #1B3835;
+        --color-input-bg: #0d1314;
+        --color-chat-bubble-bg: rgba(255, 255, 255, 0.05);
+        --color-forum-gradient: #0F211F;
     }
     
     body {
         background-color: var(--color-bg-dark) !important;
-        color: #FFFFFF;
+        color: var(--color-text-main) !important;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .forum-container {
-        background: linear-gradient(135deg, #15201E 0%, #41635D 88%, #58867E 100%);
+        background: var(--color-forum-gradient) !important;
         min-height: 100vh;
+        transition: background 0.3s ease;
     }
 
     .nav-sidebar-link {
@@ -47,6 +67,196 @@
     .custom-scrollbar::-webkit-scrollbar-thumb {
         background: var(--color-light-teal);
         border-radius: 3px;
+    }
+
+    /* CSS Overrides for hardcoded Tailwind arbitrary backgrounds and text */
+    /* Prepended with .forum-container to increase CSS specificity over Tailwind CDN runtime styles */
+    .forum-container .bg-\[\#15201E\] {
+        background-color: var(--color-card-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#374D49\] {
+        background-color: var(--color-border-dark) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#374D49\]\/40:hover {
+        background-color: var(--color-border-dark) !important;
+        opacity: 0.8;
+    }
+    .forum-container .border-\[\#374D49\]\/50, 
+    .forum-container .border-\[\#374D49\]\/40, 
+    .forum-container .border-\[\#374D49\]\/30, 
+    .forum-container .border-\[\#374D49\]\/60 {
+        border-color: var(--color-border-dark) !important;
+        transition: border-color 0.3s ease;
+    }
+    .forum-container .text-\[\#B1CDCE\] {
+        color: var(--color-text-muted) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .text-\[\#B1CDCE\]\/50, 
+    .forum-container .text-\[\#B1CDCE\]\/70 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.7;
+    }
+    .forum-container .bg-\[\#0d1314\] {
+        background-color: var(--color-input-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#0d1314\]\/50 {
+        background-color: var(--color-input-bg) !important;
+        opacity: 0.85;
+    }
+    .forum-container .bg-white\/5 {
+        background-color: var(--color-chat-bubble-bg) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .bg-\[\#377C80\] {
+        background-color: var(--color-light-teal) !important;
+        transition: background-color 0.3s ease;
+    }
+    .forum-container .text-\[\#377C80\] {
+        color: var(--color-light-teal) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container .focus\:ring-\[\#377C80\]:focus {
+        --tw-ring-color: var(--color-light-teal) !important;
+    }
+    .forum-container h3, 
+    .forum-container h4, 
+    .forum-container h5, 
+    .forum-container h6 {
+        color: var(--color-text-main) !important;
+        transition: color 0.3s ease;
+    }
+    .forum-container input::placeholder, 
+    .forum-container textarea::placeholder {
+        color: var(--color-text-muted) !important;
+        opacity: 0.55 !important;
+    }
+
+    /* Specific Light Mode text overrides for opacity classes that default to white */
+    body[data-theme="light"] .forum-container .text-white {
+        color: var(--color-text-main) !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/20 {
+        color: var(--color-border-dark) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/30 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.5 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/40 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.65 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/50 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.8 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/60 {
+        color: var(--color-text-muted) !important;
+        opacity: 0.9 !important;
+    }
+    body[data-theme="light"] .forum-container .text-white\/80 {
+        color: var(--color-text-main) !important;
+        opacity: 0.9 !important;
+    }
+
+    /* Style chat contact cards to ensure borders are highly visible and solid */
+    #chatContactsList > div {
+        border: 1px solid var(--color-border-dark) !important;
+        background-color: var(--color-card-bg) !important;
+        transition: all 0.25s ease;
+    }
+
+    /* Floating Chat Widget Light Theme Overrides */
+    body[data-theme="light"] #floatingChatWidget {
+        background-color: #ffffff !important;
+        border: 2px solid #5c7c77 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .bg-\[\#1F3637\] {
+        background-color: #F8F9FA !important;
+        border-bottom: 2px solid #5c7c77 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget #chatMessagesBox {
+        background-color: #ffffff !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .bg-\[\#274D4F\] {
+        background-color: #F8F9FA !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .p-3.border-t.bg-\[\#1F3637\], 
+    body[data-theme="light"] #floatingChatWidget .p-3.border-t.border-teal-800\/30.bg-\[\#1F3637\] {
+        border-top: 2px solid #5c7c77 !important;
+        background-color: #F8F9FA !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .bg-\[\#1b3435\] {
+        background-color: #eef0ef !important;
+        border: 1.5px solid #8fa5a2 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .text-white {
+        color: #15201E !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .text-white\/40,
+    body[data-theme="light"] #floatingChatWidget .text-white\/30,
+    body[data-theme="light"] #floatingChatWidget .text-white\/50,
+    body[data-theme="light"] #floatingChatWidget .text-white\/60 {
+        color: #15201E !important;
+        opacity: 0.8 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget .border-teal-800\/30,
+    body[data-theme="light"] #floatingChatWidget .border-teal-800\/50 {
+        border-color: #5c7c77 !important;
+    }
+    body[data-theme="light"] #floatingChatWidget #chatMessageField {
+        background-color: #ffffff !important;
+        border: 1.5px solid #5c7c77 !important;
+        color: #15201E !important;
+    }
+    body[data-theme="light"] #floatingChatWidget input::placeholder {
+        color: #4b5e5b !important;
+        opacity: 0.65 !important;
+    }
+
+    /* Define cards highlight in Light Mode */
+    body[data-theme="light"] .forum-container .bg-\[\#15201E\] {
+        box-shadow: 0 6px 24px rgba(39, 77, 79, 0.08) !important;
+        border: 1px solid var(--color-border-dark) !important;
+    }
+
+    /* Light Mode Button Overrides: make + Buat button green */
+    body[data-theme="light"] .forum-container .bg-\[\#E49438\] {
+        background-color: var(--color-light-teal) !important;
+        color: #ffffff !important;
+    }
+    body[data-theme="light"] .forum-container .bg-\[\#E49438\]:hover {
+        background-color: var(--color-border-dark) !important;
+    }
+    body[data-theme="light"] .forum-container .bg-\[\#E49438\] i {
+        color: #ffffff !important;
+    }
+
+    /* Keep button text and icons dark on Gold accent buttons in Dark Mode */
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\] {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\] i {
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#377C80\]:hover {
+        opacity: 0.9;
+    }
+
+    body[data-theme="dark"] .forum-container .bg-\[\#E49438\] {
+        background-color: var(--color-orange-accent) !important;
+        color: #0F211F !important;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#E49438\]:hover {
+        opacity: 0.9;
+    }
+    body[data-theme="dark"] .forum-container .bg-\[\#E49438\] i {
+        color: #0F211F !important;
     }
 </style>
 

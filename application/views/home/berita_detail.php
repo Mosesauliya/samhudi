@@ -1,32 +1,64 @@
 <style>
+/* ======= THEME ADAPTING VARIABLES ======= */
+:root {
+    --bd-bg: #ffffff;
+    --bd-text: #333333;
+    --bd-title: #1a2e2b;
+    --bd-meta: #666666;
+    --bd-border: #eeeeee;
+    --bd-divider: #e0e0e0;
+    --bd-sidebar-bg: #eef0ef;
+    --bd-sidebar-border: rgba(0,0,0,0.08);
+    --bd-sidebar-hover: rgba(0,0,0,0.03);
+    --bd-btn-bg: linear-gradient(135deg, #1B3835, #2E564F);
+    --bd-btn-text: #ffffff;
+}
+
+body[data-theme="dark"] {
+    --bd-bg: #0F211F;
+    --bd-text: #e8ddd4;
+    --bd-title: #C8A84E;
+    --bd-meta: #b1cdce;
+    --bd-border: #22443F;
+    --bd-divider: #22443F;
+    --bd-sidebar-bg: #1B3835;
+    --bd-sidebar-border: rgba(255,255,255,0.08);
+    --bd-sidebar-hover: rgba(255,255,255,0.03);
+    --bd-btn-bg: linear-gradient(135deg, #C8A84E, #b8963c);
+    --bd-btn-text: #0F211F;
+}
+
 /* ======= Detail Berita ======= */
 .detail-berita-wrap {
-    background: #fff;
+    background: var(--bd-bg);
+    color: var(--bd-text);
     min-height: 100vh;
     padding: 0 0 80px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Breadcrumb Bar */
 .detail-breadcrumb-bar {
-    background: #fff;
-    border-bottom: 1px solid #eee;
+    background: var(--bd-bg);
+    border-bottom: 1px solid var(--bd-border);
     padding: 14px 0;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 .detail-breadcrumb-bar .breadcrumb-inner {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 0.8rem;
-    color: #888;
+    color: var(--bd-meta);
     font-family: 'Inter', sans-serif;
 }
 .detail-breadcrumb-bar a {
-    color: #888;
+    color: var(--bd-meta);
     text-decoration: none;
     transition: color 0.2s;
 }
-.detail-breadcrumb-bar a:hover { color: #2E564F; }
-.detail-breadcrumb-bar .current { color: #333; font-weight: 600; }
+.detail-breadcrumb-bar a:hover { color: #C8A84E; }
+.detail-breadcrumb-bar .current { color: var(--bd-title); font-weight: 600; }
 
 /* Hero Section */
 .detail-hero {
@@ -38,9 +70,10 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 2.1rem;
     font-weight: 800;
-    color: #1a2e2b;
+    color: var(--bd-title);
     line-height: 1.3;
     margin-bottom: 18px;
+    transition: color 0.3s ease;
 }
 .detail-meta {
     display: flex;
@@ -53,14 +86,15 @@
     align-items: center;
     gap: 7px;
     font-size: 0.85rem;
-    color: #666;
+    color: var(--bd-meta);
     font-family: 'Inter', sans-serif;
 }
 .detail-meta-item i { font-size: 0.9rem; }
 .detail-meta-divider {
     width: 1px;
     height: 16px;
-    background: #e0e0e0;
+    background: var(--bd-divider);
+    transition: background-color 0.3s ease;
 }
 .btn-like {
     cursor: pointer;
@@ -89,13 +123,13 @@
     width: 100%;
     height: 100%;
     min-height: 260px;
-    background: #f8f9fa;
+    background: var(--bd-sidebar-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     gap: 10px;
-    color: #aaa;
+    color: var(--bd-meta);
     font-size: 3rem;
 }
 
@@ -113,24 +147,24 @@
     font-family: 'Inter', sans-serif;
     font-size: 1.05rem;
     line-height: 1.85;
-    color: #333;
+    color: var(--bd-text);
     white-space: pre-wrap;
     word-break: break-word;
+    transition: color 0.3s ease;
 }
 .detail-content-card h4 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.35rem;
     font-weight: 700;
-    color: #1a2e2b;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding-bottom: 14px;
-    border-bottom: 2px solid #f0f0f0;
+    color: var(--bd-title);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--bd-border);
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 .detail-content-card h4 i {
-    color: #2E564F;
+    color: #C8A84E;
     font-size: 1rem;
 }
 
@@ -143,35 +177,38 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 0.9rem;
     font-weight: 800;
-    color: #1a2e2b;
+    color: var(--bd-title);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 18px;
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: color 0.3s ease;
 }
 .sidebar-title::after {
     content: '';
     flex: 1;
     height: 2px;
-    background: linear-gradient(90deg, #2E564F, transparent);
+    background: linear-gradient(90deg, #C8A84E, transparent);
     border-radius: 2px;
 }
 
 /* ======= Sidebar Berita Lainnya (SATU card abu, item TANPA card) ======= */
 .sidebar-berita-box {
-    background: #eef0ef; /* abu */
+    background: var(--bd-sidebar-bg);
     border-radius: 18px;
     padding: 18px;
+    transition: background-color 0.3s ease;
 }
 .sidebar-berita-item {
     display: flex;
     gap: 14px;
     padding: 14px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid var(--bd-sidebar-border);
     text-decoration: none;
     color: inherit;
+    transition: background-color 0.2s ease, border-color 0.3s ease;
 }
 .sidebar-berita-item:first-child {
     padding-top: 2px;
@@ -179,6 +216,9 @@
 .sidebar-berita-item:last-child {
     border-bottom: none;
     padding-bottom: 2px;
+}
+.sidebar-berita-item:hover {
+    background: var(--bd-sidebar-hover);
 }
 .sidebar-berita-item .thumb {
     width: 72px;
@@ -195,7 +235,7 @@
 .sidebar-berita-item .thumb .no-img {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #2E564F, #3D6C63);
+    background: linear-gradient(135deg, #1B3835, #2E564F);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -207,17 +247,18 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
-    color: #1a2e2b;
+    color: var(--bd-title);
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin-bottom: 5px;
+    transition: color 0.3s ease;
 }
 .sidebar-berita-item .info .on-date {
     font-size: 0.73rem;
-    color: #999;
+    color: var(--bd-meta);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -226,8 +267,8 @@
 .lihat-semua-btn {
     display: block;
     text-align: center;
-    background: linear-gradient(135deg, #1B3835, #2E564F);
-    color: #fff;
+    background: var(--bd-btn-bg);
+    color: var(--bd-btn-text);
     border-radius: 12px;
     padding: 12px 0;
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -236,7 +277,7 @@
     text-decoration: none;
     letter-spacing: 0.04em;
     margin-top: 14px;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, background 0.3s ease, color 0.3s ease;
 }
 .lihat-semua-btn:hover { opacity: 0.88; color: #fff; text-decoration: none; }
 </style>
@@ -374,8 +415,8 @@ if (!function_exists('fmt_date_detail')) {
                                 </a>
                             </div>
                         <?php else: ?>
-                            <div class="sidebar-berita-box" style="text-align:center; color:#aaa; padding: 30px 0; font-size: 0.85rem;">
-                                <i class="bi bi-newspaper" style="font-size: 2rem; display:block; margin-bottom:10px;"></i>
+                            <div class="sidebar-berita-box" style="text-align:center; padding: 30px 0; font-size: 0.85rem; color: var(--bd-meta);">
+                                <i class="bi bi-newspaper" style="font-size: 2rem; display:block; margin-bottom:10px; opacity:0.5;"></i>
                                 Belum ada berita lain.
                             </div>
                         <?php endif; ?>

@@ -1,20 +1,203 @@
-html {
-    max-width: 100%;
+:root {
+    --bg-body: #F5EBE2;
+    --bg-hero: #2A4D4F;
+    --bg-carousel-top: #8F9F9F;
+    --bg-carousel: #274D4F;
+    --bg-sambutan: #FFFCDD;
+    --bg-intro: #ffffff;
+    --bg-berita: #274d4f;
+    --bg-makam: #f5f5f5;
+    --bg-card: #fff;
+    --bg-card-dark: #1B3835;
+    --border-card: #ccc;
+    --border-dark: #22443F;
+    --border-gold: #C8A84E;
+    --text-heading: #274d4f;
+    --text-body: #4b382f;
+    --text-light: #fff;
+    --text-muted: #4a5568;
+    --text-dark: #1a202c;
+    --text-caption: #1f1f1f;
+    --accent-gold: #C8A84E;
+    --ornament-dot: #8b7d72;
+    --makam-btn: #274d4f;
+    --makam-btn-hover: #1a3638;
+    --makam-btn-text: #ffffff;
+
+    /* Navbar variables */
+    --nav-bg: #274d4f;
+    --nav-text: #ffffff;
+    --nav-hover: #C8A84E;
+    --nav-btn-bg: rgba(255, 255, 255, 0.1);
+    --nav-btn-hover: rgba(255, 255, 255, 0.2);
+    --nav-pill-bg: #ffffff;
+    --nav-pill-text: #274D4F;
+    --nav-pill-hover: #f3f4f6;
+    --nav-dropdown-bg: #ffffff;
+    --nav-dropdown-text: #274D4F;
+    --nav-dropdown-hover: #f3f4f6;
+    --nav-active: #C8A84E;
+
+    /* Berita header colors */
+    --berita-title-color: #ffffff;
+    --berita-sub-color: rgba(255, 255, 255, 0.8);
 }
+
+[data-theme="dark"] {
+    --makam-btn: #C8A84E;
+    --makam-btn-hover: #b8963c;
+    --makam-btn-text: #0F211F;
+    --bg-body: #0F211F;
+    --bg-hero: #0F211F;
+    --bg-carousel-top: #0F211F;
+    --bg-carousel: #0F211F;
+    --bg-sambutan: #152B28;
+    --bg-intro: #0F211F;
+    --bg-berita: #152B28;
+    --bg-makam: #0F211F;
+    --bg-card: #1B3835;
+    --bg-card-dark: #1B3835;
+    --border-card: #22443F;
+    --border-dark: #22443F;
+    --border-gold: #C8A84E;
+    --text-heading: #C8A84E;
+    --text-body: #e8ddd4;
+    --text-light: #e8ddd4;
+    --text-muted: #e8ddd4;
+    --text-dark: #e8ddd4;
+    --text-caption: #e8ddd4;
+    --accent-gold: #C8A84E;
+    --ornament-dot: #C8A84E;
+
+    /* Navbar variables */
+    --nav-bg: #0F211F;
+    --nav-text: #ffffff;
+    --nav-hover: #C8A84E;
+    --nav-btn-bg: rgba(255, 255, 255, 0.1);
+    --nav-btn-hover: rgba(255, 255, 255, 0.2);
+    --nav-pill-bg: #ffffff;
+    --nav-pill-text: #274D4F;
+    --nav-pill-hover: #f3f4f6;
+    --nav-dropdown-bg: #1B3835;
+    --nav-dropdown-text: #ffffff;
+    --nav-dropdown-hover: #22443F;
+    --nav-active: #C8A84E;
+
+    /* Berita header colors */
+    --berita-title-color: #C8A84E;
+    --berita-sub-color: rgba(255, 255, 255, 0.8);
+}
+
+body, 
+.body-main, 
+.hero-section, 
+.sambutan-section, 
+.berita-section, 
+.makam-section,
+.carousel-card, 
+.overlap-box, 
+.overlap-section, 
+.makam-card,
+.navbar-custom,
+.navbar-custom .bg-teal-900,
+p, h1, h2, h3, h4, h5, h6, span, a, i, button {
+    transition: background-color 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
 body {
     max-width: 100%;
-    overflow-x: hidden;
+    overflow-x: clip;
+    background-color: var(--bg-body);
+}
+
+html {
+    max-width: 100%;
+    overflow-x: clip;
 }
 
 nav {
+    position: -webkit-sticky !important;
     position: sticky !important;
     top: 0 !important;
-    z-index: 50 !important;
+    z-index: 9999 !important;
+}
+
+/* Navbar Theme Override */
+.navbar-custom {
+    background-color: var(--nav-bg) !important;
+    color: var(--nav-text) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-custom .text-white,
+.navbar-custom .text-white\/90,
+.navbar-custom .text-white\/80 {
+    color: var(--nav-text) !important;
+}
+
+.navbar-custom a.hover\:text-white:hover,
+.navbar-custom a.group:hover {
+    color: var(--nav-hover) !important;
+}
+
+.navbar-custom .bg-white\/10 {
+    background-color: var(--nav-btn-bg) !important;
+}
+
+.navbar-custom .hover\:bg-white\/20:hover {
+    background-color: var(--nav-btn-hover) !important;
+}
+
+.navbar-custom .bg-white {
+    background-color: var(--nav-pill-bg) !important;
+    color: var(--nav-pill-text) !important;
+}
+
+.navbar-custom .hover\:bg-gray-100:hover {
+    background-color: var(--nav-pill-hover) !important;
+}
+
+.navbar-custom .text-\[\#274d4f\] {
+    color: var(--nav-pill-text) !important;
+}
+
+.navbar-custom .bg-teal-900 {
+    background-color: var(--nav-bg) !important;
+}
+
+.navbar-custom .border-white\/20,
+.navbar-custom .border-white\/10 {
+    border-color: var(--nav-btn-bg) !important;
+}
+
+.navbar-custom #desktop-dropdown.bg-white {
+    background-color: var(--nav-dropdown-bg) !important;
+}
+
+.navbar-custom #desktop-dropdown .text-gray-700 {
+    color: var(--nav-dropdown-text) !important;
+}
+
+.navbar-custom #desktop-dropdown a:hover {
+    background-color: var(--nav-dropdown-hover) !important;
+}
+
+.navbar-custom .text-teal-700 {
+    color: var(--nav-active) !important;
+}
+
+.navbar-custom .text-teal-600,
+.navbar-custom .bg-teal-600 {
+    color: var(--nav-active) !important;
+}
+
+.navbar-custom .bg-red-500\/80 {
+    background-color: rgba(239,68,68,0.8) !important;
 }
 
 /* Body & Typography */
 .body-main {
-    background-color: #F5EBE2;
+    background-color: var(--bg-body);
     font-family: 'Libre Baskerville';
     font-size: 22px;
 }
@@ -62,7 +245,7 @@ nav {
 
 /* Hero Section */
 .bg-hero-wrapper {
-    background-color: #2A4D4F;
+    background-color: var(--bg-hero);
     padding: clamp(0.5rem, 2vw, 1rem);
 }
 
@@ -71,8 +254,7 @@ nav {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #2A4D4F;
-    border-radius: 0 0 12px 12px;
+    background-color: var(--bg-hero);
     overflow: hidden;
 }
 
@@ -134,7 +316,7 @@ nav {
 
 /* Sambutan Section */
 .sambutan-section {
-    background-color: #FFFCDD;
+    background-color: var(--bg-sambutan);
     font-family: Arial, Helvetica, Inter, sans-serif;
 }
 
@@ -145,13 +327,13 @@ nav {
 .foto-sambutan {
     max-width: 300px;
     width: 100%;
-    border: 1px solid #ccc;
+    border: 2px solid var(--accent-gold);
     box-shadow: 0 0 10px rgba(0,0,0,.2);
 }
 
 .sambutan-title {
     font-family: Arial, Helvetica, Inter, sans-serif;
-    color: #274d4f;
+    color: var(--text-heading);
     margin-bottom: 20px;
     font-weight: bold;
     font-size: 3em;
@@ -159,7 +341,7 @@ nav {
 
 .sambutan-text {
     text-align: justify;
-    color: #274d4f;
+    color: var(--text-body);
     line-height: 1.8;
     font-size: 1.6em;
     font-family: Arial, Helvetica, Inter, sans-serif;
@@ -169,7 +351,7 @@ nav {
 .sambutan-closing {
     margin-top: 30px;
     font-family: Arial, Helvetica, Inter, sans-serif;
-    color: #274d4f;
+    color: var(--text-heading);
     font-weight: bold;
     font-size: 3em;
 }
@@ -177,7 +359,7 @@ nav {
 .sambutan-sender {
     margin-top: 15px;
     font-weight: bold;
-    color: #274d4f;
+    color: var(--text-body);
     font-family: Arial, Helvetica, Inter, sans-serif;
     font-size: 3em;
 }
@@ -185,7 +367,7 @@ nav {
 /* Carousel Section */
 .carousel-section {
     padding: 80px 0;
-    background: linear-gradient(to bottom, #8F9F9F 0%, #8F9F9F 30%, #274D4F 30%, #274D4F 100%);
+    background: linear-gradient(to bottom, var(--bg-carousel-top) 0%, var(--bg-carousel-top) 30%, var(--bg-carousel) 30%, var(--bg-carousel) 100%);
     overflow: hidden;
 }
 
@@ -200,9 +382,10 @@ nav {
     top: 50%;
     left: 50%;
     width: 260px;
-    background: #fff;
+    background: var(--bg-card);
     padding: 10px;
     border-radius: 0;
+    border: 1px solid var(--border-gold);
     box-shadow: 0 8px 20px rgba(0,0,0,.3);
     transition: .6s;
     cursor: pointer;
@@ -219,7 +402,7 @@ nav {
     font-family: 'Brittany Signature', cursive;
     font-size: 16px;
     margin-top: 4px;
-    color: #1f1f1f;
+    color: var(--text-caption);
 }
 
 /* Overlap Section */
@@ -227,6 +410,7 @@ nav {
     min-height: 100vh;
     display: flex;
     align-items: center;
+    background-color: var(--bg-intro);
 }
 
 .overlap-img {
@@ -242,13 +426,13 @@ nav {
     transform: translateY(-50%);
     width: 40px;
     height: 120px;
-    background-image: radial-gradient(#8b7d72 1px, transparent 1px);
+    background-image: radial-gradient(var(--ornament-dot) 1px, transparent 1px);
     background-size: 8px 8px;
     opacity: .5;
 }
 
 .overlap-box {
-    background: #fff;
+    background: var(--bg-card);
     width: auto;
     max-width: 480px;
     height: auto;
@@ -257,6 +441,7 @@ nav {
     z-index: 2;
     padding: clamp(1rem, 3vw, 1.8rem) clamp(1rem, 3vw, 1.8rem);
     box-shadow: 0 15px 30px rgba(0,0,0,.12);
+    border: 1px solid var(--border-card);
 }
 
 .overlap-content {
@@ -270,7 +455,7 @@ nav {
     transform: translateX(-50%);
     font-family: 'Brittany Signature', cursive;
     font-size: 32px;
-    color: #2f241e;
+    color: var(--text-heading);
     white-space: nowrap;
 }
 
@@ -279,7 +464,7 @@ nav {
     font-size: clamp(0.9rem, 2.2vw, 1.3rem);
     font-weight: 300;
     line-height: 1.5;
-    color: #4b382f;
+    color: var(--text-body);
     margin-bottom: 20px;
     
 }
@@ -288,7 +473,7 @@ nav {
     font-family: Inter, sans-serif;
     font-size: clamp(0.9rem, 2.2vw, 1.3rem);
     font-weight: 500;
-    color: #4b382f;
+    color: var(--text-body);
 }
 
 /* Responsive Media Queries (Mobile & Tablet) */
@@ -369,11 +554,11 @@ nav {
 /* Berita Section */
 .berita-section {
     min-height: 100vh;
-    background: #274d4f;
+    background: var(--bg-berita);
 }
 
 .berita-heading {
-    color: #fff;
+    color: var(--berita-title-color);
     font-family: Georgia, serif;
     font-size: 3rem;
     font-weight: 700;
@@ -381,7 +566,7 @@ nav {
 }
 
 .berita-subheading {
-    color: #e9e2dc;
+    color: var(--berita-sub-color);
     font-size: 1.1rem;
     margin-top: -10px;
 }
@@ -455,7 +640,7 @@ nav {
 }
 
 .news-link-main {
-    color: #f5ebe2;
+    color: var(--accent-gold);
     font-size: .85rem;
     text-decoration: none;
 }
@@ -466,7 +651,7 @@ nav {
 }
 
 .news-link-grid {
-    color: #f5ebe2;
+    color: var(--accent-gold);
 }
 
 .wasiat-container {
@@ -525,11 +710,11 @@ nav {
 /* Makam Section */
 .makam-section {
     padding: 60px 0;
-    background: #f5f5f5;
+    background: var(--bg-makam);
 }
 
 .makam-heading {
-    color: #274d4f;
+    color: var(--text-heading);
     font-family: Georgia, serif;
     font-size: 3rem;
     font-weight: 700;
@@ -537,16 +722,17 @@ nav {
 }
 
 .makam-subheading {
-    color: #4a5568;
+    color: var(--text-body);
     font-size: 1.1rem;
     margin-top: -10px;
 }
 
 .makam-card {
-    background: #fff;
+    background: var(--bg-card);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 25px rgba(0,0,0,.15);
+    border: 1px solid var(--border-dark);
 }
 
 .makam-map {
@@ -573,12 +759,12 @@ nav {
 .makam-alamat-title {
     font-family: Georgia, serif;
     font-weight: 700;
-    color: #274d4f;
+    color: var(--text-heading);
     margin-bottom: 0.5rem;
 }
 
 .makam-alamat {
-    color: #1a202c;
+    color: var(--text-body);
     line-height: 1.6;
     margin-bottom: 1.5rem;
 }
@@ -589,8 +775,8 @@ nav {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #274d4f;
-    color: #fff;
+    background: var(--makam-btn);
+    color: var(--makam-btn-text);
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     text-decoration: none;
@@ -618,21 +804,21 @@ nav {
 }
 
 .makam-link:hover {
-    background: #1a3638;
-    color: #fff;
+    background: var(--makam-btn-hover);
+    color: var(--makam-btn-text);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(39,77,79,.3);
+    box-shadow: 0 4px 12px rgba(200, 168, 78, 0.35);
 }
 
 .makam-link-outline {
     background: transparent;
-    border: 2px solid #274d4f;
-    color: #274d4f;
+    border: 2px solid var(--accent-gold);
+    color: var(--accent-gold);
 }
 
 .makam-link-outline:hover {
-    background: #274d4f;
-    color: #fff;
+    background: var(--accent-gold);
+    color: #0F211F;
 }
 
 @media (max-width: 768px) {
