@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const treeContainer = document.getElementById('treeContainer');
     
     // Fetch and render tree
-    fetch(treeApiUrl)
+    const bustCacheUrl = treeApiUrl + (treeApiUrl.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+    fetch(bustCacheUrl)
         .then(res => res.json())
         .then(data => {
             if (data.error) {
@@ -197,7 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset tabs to first tab
         tabs[0].click();
 
-        fetch(detailApiUrl + '?id=' + id)
+        const bustCacheUrl = detailApiUrl + '?id=' + id + '&t=' + new Date().getTime();
+        fetch(bustCacheUrl)
             .then(res => res.json())
             .then(data => {
                 if (data.error) {
