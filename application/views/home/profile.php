@@ -321,9 +321,15 @@ if (!function_exists('time_elapsed_string')) {
                         </li>
                         <li>
                             <a href="<?= base_url('profile') ?>" class="nav-sidebar-link flex items-center gap-4 py-2.5 px-4 rounded-xl transition-all bg-[#374D49] text-white shadow-sm">
-                                <div class="w-6 h-6 rounded-full overflow-hidden bg-teal-800 flex-shrink-0">
-                                    <img src="<?= !empty($user->avatar) ? base_url($user->avatar) : base_url('assets/images/photo.png') ?>" alt="Avatar" class="w-full h-full object-cover">
-                                </div>
+                                <?php if (!empty($user->avatar)): ?>
+                                    <div class="w-6 h-6 rounded-full overflow-hidden bg-teal-800 flex-shrink-0">
+                                        <img src="<?= base_url($user->avatar) ?>" alt="Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                <?php else: ?>
+                                    <div class="w-6 h-6 rounded-full bg-teal-700/60 border border-[#374D49]/40 flex items-center justify-center font-bold text-white text-xs select-none flex-shrink-0">
+                                        <?= strtoupper(substr($this->session->userdata('full_name') ?? 'U', 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
                                 Profil Saya
                             </a>
                         </li>
@@ -359,7 +365,13 @@ if (!function_exists('time_elapsed_string')) {
                     <div class="pf-profile-bar">
                         <div class="flex items-end gap-4">
                             <div class="pf-avatar-wrap">
-                                <img src="<?= !empty($user->avatar) && file_exists('./' . $user->avatar) ? base_url($user->avatar) : base_url('assets/images/photo.png') ?>" alt="Avatar" class="pf-avatar">
+                                <?php if (!empty($user->avatar) && file_exists('./' . $user->avatar)): ?>
+                                    <img src="<?= base_url($user->avatar) ?>" alt="Avatar" class="pf-avatar">
+                                <?php else: ?>
+                                    <div class="pf-avatar flex items-center justify-center font-bold text-white text-3xl select-none bg-teal-700/60 border border-[#374D49]/40">
+                                        <?= strtoupper(substr($user->full_name ?? 'U', 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="pf-user-info pb-2">
                                 <div class="pf-user-name"><?= htmlspecialchars($user->full_name) ?></div>
@@ -555,7 +567,7 @@ if (!function_exists('time_elapsed_string')) {
             <!-- Drag & Drop Avatar -->
             <label class="pf-label">Foto Profil</label>
             <div class="avatar-drop-zone" id="avatarDropZone">
-                <img src="<?= !empty($user->avatar) && file_exists('./' . $user->avatar) ? base_url($user->avatar) : base_url('assets/images/photo.png') ?>" 
+                <img src="<?= !empty($user->avatar) && file_exists('./' . $user->avatar) ? base_url($user->avatar) : 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23274D4F%22/><circle cx=%2250%22 cy=%2240%22 r=%2220%22 fill=%22%23B1CDCE%22/><path d=%22M15 85 C15 65 35 60 50 60 C65 60 85 65 85 85%22 fill=%22%23B1CDCE%22/></svg>' ?>" 
                      alt="Avatar Preview" class="avatar-preview-img" id="avatarPreview">
                 <p class="text-xs text-[#B1CDCE] mb-1 font-semibold">Tarik & Lepas foto ke sini</p>
                 <p class="text-[10px] text-[#B1CDCE]/50">atau klik untuk menelusuri file (Max 2MB)</p>
@@ -663,8 +675,9 @@ if (!function_exists('time_elapsed_string')) {
     <!-- Chat Header -->
     <div class="bg-[#1F3637] px-4 py-3 flex items-center justify-between rounded-t-2xl border-b border-teal-800/30">
         <div class="flex items-center gap-2 min-w-0">
-            <div class="w-8 h-8 rounded-full overflow-hidden bg-teal-800 flex-shrink-0">
-                <img id="chatActiveAvatar" src="<?= base_url('assets/images/photo.png') ?>" alt="Contact avatar" class="w-full h-full object-cover">
+            <div id="chatActiveAvatarContainer" class="w-8 h-8 rounded-full overflow-hidden bg-teal-800 flex-shrink-0 flex items-center justify-center font-bold text-white text-xs select-none border border-teal-700/50">
+                <img id="chatActiveAvatar" src="" alt="Contact avatar" class="w-full h-full object-cover">
+                <span id="chatActiveInitial" class="hidden"></span>
             </div>
             <div class="min-w-0">
                 <h4 id="chatActiveName" class="text-xs font-bold text-white truncate">Nama Kontak</h4>
@@ -730,16 +743,24 @@ if (!function_exists('time_elapsed_string')) {
 
         let html = '';
         users.forEach(u => {
-            const avatarSrc = u.avatar ? `<?= base_url() ?>${u.avatar}` : `<?= base_url('assets/images/photo.png') ?>`;
+            let avatarHtml = '';
+            if (u.avatar) {
+                avatarHtml = `<div class="w-9 h-9 rounded-full overflow-hidden bg-teal-800 flex-shrink-0 border border-[#374D49]/30 shadow-sm">
+                                  <img src="<?= base_url() ?>${u.avatar}" class="w-full h-full object-cover">
+                              </div>`;
+            } else {
+                const initial = (u.full_name || 'U').charAt(0).toUpperCase();
+                avatarHtml = `<div class="w-9 h-9 rounded-full bg-teal-700/60 border border-[#374D49]/40 flex items-center justify-center font-bold text-white text-xs select-none flex-shrink-0">
+                                  ${initial}
+                              </div>`;
+            }
             const badge = u.unread_count > 0 ? `<span class="bg-emerald-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0">${u.unread_count}</span>` : '';
             
             html += `
-                <div onclick="openChatWidget(${u.id}, '${u.full_name.replace(/'/g, "\\'")}', '${avatarSrc}')" 
+                <div onclick="openChatWidget(${u.id}, '${u.full_name.replace(/'/g, "\\'")}', '${u.avatar || ''}')" 
                      class="flex items-center justify-between gap-3 p-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-[#374D49]/30">
                     <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-9 h-9 rounded-full overflow-hidden bg-teal-800 flex-shrink-0">
-                            <img src="${avatarSrc}" class="w-full h-full object-cover">
-                        </div>
+                        ${avatarHtml}
                         <div class="min-w-0">
                             <h4 class="text-xs font-bold text-white truncate">${u.full_name}</h4>
                             <p class="text-[10px] text-white/50 truncate mt-0.5">${u.last_message || 'Belum ada pesan'}</p>
@@ -755,11 +776,24 @@ if (!function_exists('time_elapsed_string')) {
         list.innerHTML = html;
     }
 
-    function openChatWidget(userId, userName, avatarUrl) {
+    function openChatWidget(userId, userName, avatar) {
         activeChatUserId = userId;
         document.getElementById('chatReceiverId').value = userId;
         document.getElementById('chatActiveName').textContent = userName;
-        document.getElementById('chatActiveAvatar').src = avatarUrl;
+        
+        const img = document.getElementById('chatActiveAvatar');
+        const initial = document.getElementById('chatActiveInitial');
+        
+        if (avatar) {
+            img.src = "<?= base_url() ?>" + avatar;
+            img.classList.remove('hidden');
+            initial.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            initial.textContent = (userName || 'U').charAt(0).toUpperCase();
+            initial.classList.remove('hidden');
+        }
+        
         document.getElementById('floatingChatWidget').classList.remove('hidden');
         loadChatMessages();
         clearInterval(chatRefreshInterval);

@@ -126,9 +126,15 @@
                                     <tr class="hover:bg-brand-dark/10 transition-colors">
                                         <td class="py-4 pr-4">
                                             <div class="flex items-center gap-3">
-                                                <div class="w-10 h-10 rounded-full overflow-hidden bg-brand-medium/40 border border-brand-medium/20 shrink-0">
-                                                    <img src="<?= !empty($p['avatar']) ? base_url($p['avatar']) : base_url('assets/images/photo.png') ?>" alt="Avatar" class="w-full h-full object-cover">
-                                                </div>
+                                                <?php if (!empty($p['avatar'])): ?>
+                                                    <div class="w-10 h-10 rounded-full overflow-hidden bg-brand-medium/40 border border-brand-medium/20 shrink-0">
+                                                        <img src="<?= base_url($p['avatar']) ?>" alt="Avatar" class="w-full h-full object-cover">
+                                                    </div>
+                                                <?php else: ?>
+                                                    <div class="w-10 h-10 rounded-full bg-brand-medium border border-[#4D6B67]/30 flex items-center justify-center font-bold text-white text-sm select-none shrink-0">
+                                                        <?= strtoupper(substr($p['full_name'] ?? 'U', 0, 1)) ?>
+                                                    </div>
+                                                <?php endif; ?>
                                                 <div class="min-w-0">
                                                     <div class="font-semibold text-white text-sm truncate">
                                                         <?= htmlspecialchars($p['full_name']) ?>

@@ -265,9 +265,15 @@ if (!function_exists('time_elapsed_string')) {
                         </li>
                         <li>
                             <a href="<?= base_url('profile') ?>" class="nav-sidebar-link flex items-center gap-4 py-2.5 px-4 rounded-xl transition-all text-[#B1CDCE] hover:text-white hover:bg-[#374D49]/40">
-                                <div class="w-6 h-6 rounded-full overflow-hidden bg-teal-800 flex-shrink-0">
-                                    <img src="<?= !empty($user->avatar) ? base_url($user->avatar) : base_url('assets/images/photo.png') ?>" alt="Avatar" class="w-full h-full object-cover">
-                                </div>
+                                <?php if (!empty($user->avatar)): ?>
+                                    <div class="w-6 h-6 rounded-full overflow-hidden bg-teal-800 flex-shrink-0">
+                                        <img src="<?= base_url($user->avatar) ?>" alt="Avatar" class="w-full h-full object-cover">
+                                    </div>
+                                <?php else: ?>
+                                    <div class="w-6 h-6 rounded-full bg-teal-700/60 border border-[#374D49]/40 flex items-center justify-center font-bold text-white text-xs select-none flex-shrink-0">
+                                        <?= strtoupper(substr($this->session->userdata('full_name') ?? 'U', 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
                                 Profil Saya
                             </a>
                         </li>
@@ -450,7 +456,7 @@ if (!function_exists('time_elapsed_string')) {
                             <?php foreach($workers as $worker): ?>
                                 <div class="worker-card" onclick="openWorkerDetailModal(<?= htmlspecialchars(json_encode([
                                     'full_name'    => $worker->full_name,
-                                    'avatar'       => !empty($worker->avatar) ? base_url($worker->avatar) : base_url('assets/images/photo.png'),
+                                    'avatar'       => !empty($worker->avatar) ? base_url($worker->avatar) : '',
                                     'work_role'    => $worker->work_role ?? '',
                                     'desired_job'  => $worker->desired_job ?? '',
                                     'birth_date'   => $worker->birth_date ?? '',
@@ -458,8 +464,14 @@ if (!function_exists('time_elapsed_string')) {
                                     'about'        => $worker->about ?? '',
                                     'is_fresh_graduate' => $worker->is_fresh_graduate ?? 0,
                                     'cv_path'      => $worker->cv_path ?? '',
-                                ]), ENT_QUOTES) ?>)">
-                                    <img src="<?= !empty($worker->avatar) ? base_url($worker->avatar) : base_url('assets/images/photo.png') ?>" alt="Avatar" class="worker-avatar">
+                                 ]), ENT_QUOTES) ?>)">
+                                    <?php if (!empty($worker->avatar)): ?>
+                                        <img src="<?= base_url($worker->avatar) ?>" alt="Avatar" class="worker-avatar">
+                                    <?php else: ?>
+                                        <div class="worker-avatar flex items-center justify-center font-bold text-white text-xl select-none bg-teal-700/60 border border-[#374D49]/40 shrink-0">
+                                            <?= strtoupper(substr($worker->full_name ?? 'U', 0, 1)) ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="flex-1 min-w-0">
                                         <h3 class="text-base font-bold text-white truncate"><?= htmlspecialchars($worker->full_name) ?></h3>
                                         <p class="text-sm text-[#E49438] font-semibold mb-2 truncate"><?= htmlspecialchars($worker->desired_job ?: ($worker->work_role ?? 'Tidak ada role spesifik')) ?></p>
@@ -626,8 +638,13 @@ if (!function_exists('time_elapsed_string')) {
 
             <!-- Foto Profil (preview) -->
             <div class="flex items-center gap-4 mb-5 p-4 bg-black/20 rounded-xl border border-[#374D49]">
-                <img src="<?= !empty($user->avatar) ? base_url($user->avatar) : base_url('assets/images/photo.png') ?>" 
-                     alt="Foto Profil" class="otw-profile-avatar">
+                <?php if (!empty($user->avatar)): ?>
+                    <img src="<?= base_url($user->avatar) ?>" alt="Foto Profil" class="otw-profile-avatar">
+                <?php else: ?>
+                    <div class="otw-profile-avatar flex items-center justify-center font-bold text-white text-2xl select-none bg-teal-700/60 border border-[#374D49]/40 shrink-0">
+                        <?= strtoupper(substr($user->full_name ?? 'U', 0, 1)) ?>
+                    </div>
+                <?php endif; ?>
                 <div>
                     <div class="text-xs text-[#B1CDCE] mb-1 font-bold uppercase tracking-wider">Foto Profil</div>
                     <div class="text-base font-bold text-white"><?= htmlspecialchars($user->full_name) ?></div>
@@ -704,7 +721,10 @@ if (!function_exists('time_elapsed_string')) {
 
         <!-- Worker Info Header -->
         <div class="flex items-center gap-4 mb-5">
-            <img id="wdAvatar" src="" alt="Avatar" class="otw-profile-avatar">
+            <div id="wdAvatarContainer" class="w-[72px] h-[72px] rounded-full overflow-hidden bg-teal-800 flex-shrink-0 flex items-center justify-center font-bold text-white text-2xl select-none border-3 border-teal-600/50 shadow-md">
+                <img id="wdAvatar" src="" alt="Avatar" class="w-full h-full object-cover">
+                <span id="wdAvatarInitial" class="hidden"></span>
+            </div>
             <div>
                 <h4 id="wdName" class="text-lg font-bold text-white"></h4>
                 <p id="wdDesiredJob" class="text-sm text-[#E49438] font-semibold"></p>
@@ -798,7 +818,19 @@ if (!function_exists('time_elapsed_string')) {
 
     // ======================== Worker Detail Modal ========================
     function openWorkerDetailModal(data) {
-        document.getElementById('wdAvatar').src = data.avatar;
+        const img = document.getElementById('wdAvatar');
+        const initial = document.getElementById('wdAvatarInitial');
+        
+        if (data.avatar) {
+            img.src = data.avatar;
+            img.classList.remove('hidden');
+            initial.classList.add('hidden');
+        } else {
+            img.classList.add('hidden');
+            initial.textContent = (data.full_name || 'U').charAt(0).toUpperCase();
+            initial.classList.remove('hidden');
+        }
+        
         document.getElementById('wdName').textContent = data.full_name;
         document.getElementById('wdDesiredJob').textContent = data.desired_job || data.work_role || 'Tidak ada role spesifik';
 
