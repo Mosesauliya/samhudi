@@ -193,6 +193,7 @@ if (!function_exists('time_elapsed_string')) {
     .worker-card:hover {
         transform: translateY(-2px);
         border-color: var(--color-light-teal) !important;
+        background: rgba(55, 124, 128, 0.08);
     }
     .worker-avatar {
         width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
@@ -310,6 +311,25 @@ if (!function_exists('time_elapsed_string')) {
     }
     body[data-theme="dark"] .linkedin-container .bg-\[\#377C80\]:hover {
         opacity: 0.9;
+    }
+
+    /* OTW Avatar in modal */
+    .otw-profile-avatar {
+        width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+        border: 3px solid var(--color-light-teal);
+        box-shadow: 0 4px 12px rgba(55,124,128,0.3);
+    }
+
+    /* LinkedIn Brand Icon Custom */
+    .ln-brand-icon {
+        width: 20px; height: 20px;
+        background: linear-gradient(135deg, #0077b5, #00a0dc);
+        border-radius: 4px;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 11px; font-weight: 900; color: white;
+        font-style: italic;
+        letter-spacing: -1px;
+        flex-shrink: 0;
     }
 </style>
 
