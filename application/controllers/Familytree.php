@@ -132,27 +132,43 @@ class Familytree extends CI_Controller
         $processed_rel_ids = [];
         $this->load->model('Family_model');
 
+        $full_name = trim($this->input->post('full_name'));
+
+        // Cek nama kembar di database family_members untuk main user
+        $this->db->where('full_name', $full_name);
+        if ($this->db->get('family_members')->num_rows() > 0) {
+            echo json_encode(['status' => false, 'message' => 'Nama "' . htmlspecialchars($full_name) . '" sudah terdaftar dalam silsilah. Mohon gunakan nama yang berbeda (misal: tambah nama panggilan/alias).']);
+            return;
+        }
+
         foreach ($rel_ids as $r_id) {
             if (strpos($r_id, 'new_') === 0) {
-                // Format: new_Nama_Gender[_ParentID]
+                // Format: new_Nama_Gender_Generasi_ParentID
                 $parts = explode('_', $r_id);
-                $parent_id = null;
-                if (count($parts) >= 4 && is_numeric(end($parts))) {
-                    $parent_id = array_pop($parts);
-                }
+                $parent_id = array_pop($parts);
+                if ($parent_id == '0') $parent_id = null;
                 
-                if (count($parts) >= 3) {
-                    $gender = array_pop($parts);
-                    array_shift($parts); // hapus awalan 'new'
-                    $name = urldecode(implode('_', $parts));
+                $generasi = array_pop($parts);
+                $gender = array_pop($parts); // L atau P
+                array_shift($parts); // hapus awalan 'new'
+                $name = urldecode(implode('_', $parts));
+                $name = trim($name);
 
-                    // Buat relasi baru (pending)
-                    $new_member_data = [
-                        'full_name' => $name,
-                        'gender'    => $gender,
-                        'is_alive'  => 1,
-                        'status'    => 'pending'
-                    ];
+                // Cek nama kembar untuk relasi
+                $this->db->where('full_name', $name);
+                if ($this->db->get('family_members')->num_rows() > 0) {
+                    echo json_encode(['status' => false, 'message' => 'Nama relasi "' . htmlspecialchars($name) . '" sudah ada di silsilah. Mohon pilih dari daftar, atau gunakan nama berbeda jika orangnya berbeda.']);
+                    return;
+                }
+
+                // Buat relasi baru (pending)
+                $new_member_data = [
+                    'full_name' => $name,
+                    'gender'    => $gender,
+                    'generasi'  => $generasi,
+                    'is_alive'  => 1,
+                    'status'    => 'pending'
+                ];
                     
                     // Cek jika parent ID disertakan
                     if ($parent_id) {
@@ -168,7 +184,6 @@ class Familytree extends CI_Controller
                     
                     $this->db->insert('family_members', $new_member_data);
                     $processed_rel_ids[] = $this->db->insert_id();
-                }
             } else {
                 $processed_rel_ids[] = (int)$r_id;
             }
@@ -178,7 +193,7 @@ class Familytree extends CI_Controller
         $pending_user_id = $this->session->userdata('pending_user_id');
 
         $data = [
-            'full_name' => $this->input->post('full_name'),
+            'full_name' => $full_name,
             'birth_date' => $this->input->post('birth_date'),
             'gender' => $this->input->post('gender'), // 'L' atau 'P'
             'generasi' => $this->input->post('generasi') ? (int)$this->input->post('generasi') : NULL,
