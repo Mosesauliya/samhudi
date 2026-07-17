@@ -20,7 +20,7 @@ $current_page = isset($active_menu) ? $active_menu : ($this->uri->segment(2) ? $
     </div>
 
     <!-- Sidebar Navigation -->
-    <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
+    <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto overscroll-contain">
         
         <!-- Dashboard -->
         <a href="<?= base_url('admin') ?>" 
