@@ -132,27 +132,43 @@ class Familytree extends CI_Controller
         $processed_rel_ids = [];
         $this->load->model('Family_model');
 
+        $full_name = trim($this->input->post('full_name'));
+
+        // Cek nama kembar di database family_members untuk main user
+        $this->db->where('full_name', $full_name);
+        if ($this->db->get('family_members')->num_rows() > 0) {
+            echo json_encode(['status' => false, 'message' => 'Nama "' . htmlspecialchars($full_name) . '" sudah terdaftar dalam silsilah. Mohon gunakan nama yang berbeda (misal: tambah nama panggilan/alias).']);
+            return;
+        }
+
         foreach ($rel_ids as $r_id) {
             if (strpos($r_id, 'new_') === 0) {
-                // Format: new_Nama_Gender[_ParentID]
+                // Format: new_Nama_Gender_Generasi_ParentID
                 $parts = explode('_', $r_id);
-                $parent_id = null;
-                if (count($parts) >= 4 && is_numeric(end($parts))) {
-                    $parent_id = array_pop($parts);
-                }
+                $parent_id = array_pop($parts);
+                if ($parent_id == '0') $parent_id = null;
                 
-                if (count($parts) >= 3) {
-                    $gender = array_pop($parts);
-                    array_shift($parts); // hapus awalan 'new'
-                    $name = urldecode(implode('_', $parts));
+                $generasi = array_pop($parts);
+                $gender = array_pop($parts); // L atau P
+                array_shift($parts); // hapus awalan 'new'
+                $name = urldecode(implode('_', $parts));
+                $name = trim($name);
 
-                    // Buat relasi baru (pending)
-                    $new_member_data = [
-                        'full_name' => $name,
-                        'gender'    => $gender,
-                        'is_alive'  => 1,
-                        'status'    => 'pending'
-                    ];
+                // Cek nama kembar untuk relasi
+                $this->db->where('full_name', $name);
+                if ($this->db->get('family_members')->num_rows() > 0) {
+                    echo json_encode(['status' => false, 'message' => 'Nama relasi "' . htmlspecialchars($name) . '" sudah ada di silsilah. Mohon pilih dari daftar, atau gunakan nama berbeda jika orangnya berbeda.']);
+                    return;
+                }
+
+                // Buat relasi baru
+                $new_member_data = [
+                    'full_name' => $name,
+                    'gender'    => $gender,
+                    'generasi'  => $generasi,
+                    'is_alive'  => 1,
+                    'status'    => 'approved'
+                ];
                     
                     // Cek jika parent ID disertakan
                     if ($parent_id) {
@@ -168,7 +184,6 @@ class Familytree extends CI_Controller
                     
                     $this->db->insert('family_members', $new_member_data);
                     $processed_rel_ids[] = $this->db->insert_id();
-                }
             } else {
                 $processed_rel_ids[] = (int)$r_id;
             }
@@ -178,12 +193,13 @@ class Familytree extends CI_Controller
         $pending_user_id = $this->session->userdata('pending_user_id');
 
         $data = [
-            'full_name' => $this->input->post('full_name'),
+            'full_name' => $full_name,
             'birth_date' => $this->input->post('birth_date'),
             'gender' => $this->input->post('gender'), // 'L' atau 'P'
             'generasi' => $this->input->post('generasi') ? (int)$this->input->post('generasi') : NULL,
             'is_alive' => 1,
-            'status' => 'pending'
+            'status' => 'approved',
+            'created_by' => $this->session->userdata('user_id')
         ];
 
         if ($pending_user_id) {
@@ -231,5 +247,88 @@ class Familytree extends CI_Controller
             $msg = $result['message'] ?? 'Gagal menambahkan data, pastikan relasi valid.';
             echo json_encode(['status' => false, 'message' => $msg]);
         }
+    }
+
+    public function edit_member($id = null)
+    {
+        if (!$this->session->userdata('logged_in')) {
+            $this->session->set_flashdata('errors', ['Anda harus login terlebih dahulu.']);
+            redirect('auth');
+            return;
+        }
+
+        if (!$id) {
+            redirect('familytree');
+            return;
+        }
+
+        $this->load->model('Family_model');
+        $member = $this->db->get_where('family_members', ['id' => $id])->row_array();
+
+        if (!$member) {
+            show_404();
+            return;
+        }
+
+        $user_id = $this->session->userdata('user_id');
+        $role = $this->session->userdata('role');
+
+        if ($role !== 'admin' && $role !== 'super_admin' && $member['created_by'] != $user_id) {
+            $this->session->set_flashdata('error', 'Anda tidak memiliki akses untuk mengedit data ini.');
+            redirect('familytree');
+            return;
+        }
+
+        if ($this->input->post()) {
+            $data = [
+                'full_name' => $this->input->post('full_name'),
+                'gender' => $this->input->post('gender'),
+                'birth_place' => $this->input->post('birth_place'),
+                'birth_date' => empty($this->input->post('birth_date')) ? NULL : $this->input->post('birth_date'),
+                'death_date' => empty($this->input->post('death_date')) ? NULL : $this->input->post('death_date'),
+                'is_alive' => $this->input->post('is_alive') ? 1 : 0,
+                'phone' => $this->input->post('phone'),
+                'email' => $this->input->post('email'),
+                'occupation' => $this->input->post('occupation'),
+                'address' => $this->input->post('address'),
+                'generasi' => $this->input->post('generasi') ? (int)$this->input->post('generasi') : NULL,
+                'father_id' => $this->input->post('father_id') ? (int)$this->input->post('father_id') : NULL,
+                'mother_id' => $this->input->post('mother_id') ? (int)$this->input->post('mother_id') : NULL,
+            ];
+
+            // Handle photo upload
+            if (isset($_FILES['photo']) && $_FILES['photo']['name']) {
+                $config['upload_path']   = FCPATH . 'assets/uploads/';
+                $config['allowed_types'] = 'gif|jpg|jpeg|png';
+                $config['max_size']      = 2048; // 2MB
+                $config['file_name']     = time() . '_' . $_FILES['photo']['name'];
+                
+                if (!is_dir($config['upload_path'])) {
+                    mkdir($config['upload_path'], 0777, true);
+                }
+                
+                $this->load->library('upload');
+                $this->upload->initialize($config);
+                
+                if ($this->upload->do_upload('photo')) {
+                    $uploadData = $this->upload->data();
+                    $data['photo'] = 'assets/uploads/' . $uploadData['file_name'];
+                    
+                    if (!empty($member['photo']) && file_exists(FCPATH . $member['photo'])) {
+                        unlink(FCPATH . $member['photo']);
+                    }
+                }
+            }
+
+            $this->db->where('id', $id);
+            $this->db->update('family_members', $data);
+
+            $this->session->set_flashdata('success', 'Data berhasil diubah.');
+            redirect('familytree');
+            return;
+        }
+
+        $data['member'] = $member;
+        $this->load->view('silsilah/edit', $data);
     }
 }

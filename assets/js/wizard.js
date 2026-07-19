@@ -4,8 +4,23 @@ let selectedRelIds = []; // Array of {id, name, gender}
 let selectedRelGender = '';
 let newMemberId = null;
 
+function showRelationError(elementId, msg) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.innerText = msg;
+    el.style.display = 'block';
+    setTimeout(() => {
+        el.style.display = 'none';
+    }, 3500);
+}
+
 // Step Navigation
 function nextStep(stepIndex) {
+    if (stepIndex === 3 && selectedRole === 'anak') {
+        if (currentStep === 2) stepIndex = 4;
+        else if (currentStep === 4) stepIndex = 2;
+    }
+
     if (stepIndex === 1) {
         document.getElementById('wizardHeader').style.display = 'flex';
     }
@@ -14,6 +29,8 @@ function nextStep(stepIndex) {
     if (stepIndex === 1) {
         document.getElementById('stepTitle').innerText = 'Siapa Kamu?';
     } else if (stepIndex === 2) {
+        document.getElementById('stepTitle').innerText = 'Generasi';
+    } else if (stepIndex === 3) {
         document.getElementById('stepTitle').innerText = 'Hubungan';
         // Setup question text based on role
         if (selectedRole === 'anak') {
@@ -25,7 +42,7 @@ function nextStep(stepIndex) {
         }
         // Focus search box
         setTimeout(() => document.getElementById('searchMember').focus(), 100);
-    } else if (stepIndex === 3) {
+    } else if (stepIndex === 4) {
         document.getElementById('stepTitle').innerText = 'Data Diri';
         setupGenderLock();
     }
@@ -38,10 +55,12 @@ function nextStep(stepIndex) {
     if (stepIndex > 0) {
         document.querySelector('.step-num').innerText = stepIndex;
         // Update leaves
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 4; i++) {
             const leaf = document.getElementById('leaf' + i);
-            if (i <= stepIndex) leaf.classList.add('active');
-            else leaf.classList.remove('active');
+            if (leaf) {
+                if (i <= stepIndex) leaf.classList.add('active');
+                else leaf.classList.remove('active');
+            }
         }
     }
     
@@ -59,6 +78,13 @@ function enableNext(step) {
             selectedRole = checked.value;
             document.getElementById('btnNext1').disabled = false;
         }
+    } else if (step === 2) {
+        const gen = document.getElementById('generasi').value;
+        if (gen) {
+            document.getElementById('btnNext2').disabled = false;
+        } else {
+            document.getElementById('btnNext2').disabled = true;
+        }
     }
 }
 
@@ -70,7 +96,6 @@ function searchMember(term) {
     
     if (term.length < 2) {
         listEl.innerHTML = '<div style="text-align:center; color:gray; font-size:12px; padding:10px;">Ketik minimal 2 huruf</div>';
-        document.getElementById('btnNext2').disabled = true;
         return;
     }
     
@@ -174,11 +199,31 @@ function submitNewRelative() {
         return;
     }
     
+    const generasi = document.getElementById('newRelGenerasi').value;
+    if (!generasi) {
+        document.getElementById('newRelGenerasiError').style.display = 'block';
+        return;
+    }
+
+    if (selectedRole === 'anak') {
+        const sameGenderExists = selectedRelIds.some(r => r.gender === gender);
+        if (sameGenderExists) {
+            showRelationError('newRelParentError', 'Anda hanya bisa memilih satu ' + (gender === 'L' ? 'Ayah' : 'Ibu') + '!');
+            return;
+        }
+        if (selectedRelIds.length >= 2) {
+            showRelationError('newRelParentError', 'Maksimal hanya bisa memilih 2 orang tua!');
+            return;
+        }
+    }
+    
     const parentId = document.getElementById('selectedParentId').value;
     
-    let id = 'new_' + encodeURIComponent(name) + '_' + gender;
+    let id = 'new_' + encodeURIComponent(name) + '_' + gender + '_' + generasi;
     if (parentId) {
         id += '_' + parentId;
+    } else {
+        id += '_0'; // eksplisit pass 0 jika tidak ada parent
     }
     
     if (!selectedRelIds.some(r => r.id == id)) {
@@ -212,6 +257,20 @@ function clearSelectedParent() {
 
 // Event Listeners diletakkan setelah DOM siap
 document.addEventListener('DOMContentLoaded', () => {
+    // Auto-fill generasi dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const genParam = urlParams.get('generasi');
+    if (genParam) {
+        const genSelect = document.getElementById('generasi');
+        if (genSelect) {
+            genSelect.value = genParam;
+            // Panggil event onchange manual agar tombol Next aktif
+            if (typeof enableNext === 'function') {
+                enableNext(2);
+            }
+        }
+    }
+
     // Parent search logic
     const parentSearch = document.getElementById('parentSearch');
     let parentSearchTimeout;
@@ -275,12 +334,12 @@ function selectRelation(input) {
         if (input.checked) {
             const sameGenderExists = selectedRelIds.some(r => r.gender === gender);
             if (sameGenderExists) {
-                alert('Anda hanya bisa memilih satu ' + (gender === 'L' ? 'Ayah' : 'Ibu') + '!');
+                showRelationError('relationError', 'Anda hanya bisa memilih satu ' + (gender === 'L' ? 'Ayah' : 'Ibu') + '!');
                 input.checked = false;
                 return;
             }
             if (selectedRelIds.length >= 2) {
-                alert('Maksimal hanya bisa memilih 2 orang tua!');
+                showRelationError('relationError', 'Maksimal hanya bisa memilih 2 orang tua!');
                 input.checked = false;
                 return;
             }
@@ -321,10 +380,10 @@ function updateSelectedTags() {
     
     if (selectedRelIds.length > 0) {
         selectedRelGender = selectedRelIds[0].gender; // Pakai gender orang pertama untuk acuan
-        document.getElementById('btnNext2').disabled = false;
+        document.getElementById('btnNext3').disabled = false;
     } else {
         selectedRelGender = '';
-        document.getElementById('btnNext2').disabled = true;
+        document.getElementById('btnNext3').disabled = true;
     }
     
     // Sinkronisasi dengan checkbox di list pencarian (jika terlihat)
@@ -366,7 +425,7 @@ function setupGenderLock() {
             lblP.classList.add('disabled');
         }
     }
-    checkForm3();
+    checkForm4();
 }
 
 function previewUpload(input) {
@@ -379,7 +438,7 @@ function previewUpload(input) {
     }
 }
 
-function checkForm3() {
+function checkForm4() {
     const name = document.getElementById('fullName').value.trim();
     const dob = document.getElementById('birthDate').value;
     const gender = document.querySelector('input[name="gender"]:checked');

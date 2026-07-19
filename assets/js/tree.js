@@ -13,20 +13,31 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Flatten tree by depth
             const generations = {};
+            window.allTreeMembers = [];
+            const visitedIds = new Set();
             
             function traverse(node, depth) {
+                if (visitedIds.has(node.id)) return;
+                visitedIds.add(node.id);
+                
                 // Gunakan generasi manual jika ada, jika tidak fallback ke hitungan otomatis (depth + 1)
                 let genIndex = node.generasi ? (parseInt(node.generasi) - 1) : depth;
                 
                 if (!generations[genIndex]) generations[genIndex] = [];
                 generations[genIndex].push(node);
+                window.allTreeMembers.push(node);
                 
                 if (node.children && node.children.length > 0) {
                     node.children.forEach(child => traverse(child, depth + 1));
                 }
             }
             
-            traverse(data, 0);
+            if (Array.isArray(data)) {
+                data.forEach(root => traverse(root, 0));
+            } else {
+                traverse(data, 0);
+            }
+            
             renderGenerations(generations);
         })
         .catch(err => {
@@ -62,6 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const genKeys = Object.keys(generations).map(Number).sort((a,b)=>a-b);
         
+        if (genKeys.length === 0) {
+            treeContainer.innerHTML = `
+                <div class="empty-state" style="text-align: center; padding: 40px;">
+                    Belum ada data silsilah keluarga.
+                    <br><br>
+                    <a href="${treeApiUrl.replace('get_family_tree', 'add')}" class="btn-tambah-anggota" style="display: inline-block; padding: 10px 20px; background: var(--accent); color: white; border-radius: 8px; text-decoration: none;">+ Tambah Anggota Pertama</a>
+                </div>`;
+            return;
+        }
+
         genKeys.forEach(depth => {
             const members = generations[depth];
             
@@ -74,7 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (depth === 3) genSub = 'Cicit';
             else if (depth === 4) genSub = 'Piut';
             
-            const totalIndividu = members.reduce((acc, m) => acc + 1 + (m.pasangan ? 1 : 0), 0);
+            const totalIndividu = members.reduce((acc, m) => acc + 1 + (m.pasangan ? m.pasangan.length || 1 : 0), 0);
+            const totalKeluarga = members.length;
             
             const rowHtml = `
                 <div class="generation-row">
@@ -83,15 +105,20 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h3 class="gen-title">${genName}</h3>
                             <p class="gen-subtitle">${genSub}</p>
                             <div class="gen-stats">
-                                <i class="bi bi-people"></i> ${members.length} Keluarga
+                                <i class="bi bi-people"></i> ${totalKeluarga} Keluarga
                             </div>
                             <div class="gen-stats" style="margin-top:4px;">
                                 <i class="bi bi-person"></i> ${totalIndividu} Individu
                             </div>
                         </div>
                     </div>
-                    <div class="generation-cards">
+                    <div class="generation-cards" style="flex: 1; align-items: center;">
                         ${members.map(m => renderMemberCard(m)).join('')}
+                    </div>
+                    <div class="generation-add-btn-container" style="display: flex; align-items: center; justify-content: center; width: 80px; flex-shrink: 0; background: var(--cream); border-left: 1px dashed var(--line);">
+                        <button class="btn-add-gen" onclick="addGenerationMember(${depth + 1})" title="Tambah Anggota ${genName}" style="width: 50px; height: 50px; border-radius: 50%; background: transparent; border: 2px solid var(--accent); color: var(--accent); font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; opacity: 0.8;" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.1)';" onmouseout="this.style.opacity='0.8'; this.style.transform='scale(1)';">
+                            <i class="bi bi-plus"></i>
+                        </button>
                     </div>
                 </div>
             `;
@@ -220,6 +247,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function populateModal(data) {
+        // Edit Button Logic
+        const btnEdit = document.getElementById('btnEditModal');
+        if (btnEdit) {
+            const role = window.currentUserRole;
+            const currentUserId = window.currentUserId;
+            if (role === 'admin' || role === 'super_admin' || (data.created_by && data.created_by == currentUserId)) {
+                btnEdit.style.display = 'inline-block';
+                btnEdit.href = '#';
+                btnEdit.onclick = function(e) {
+                    e.preventDefault();
+                    if (window.openEditModal) window.openEditModal(data);
+                };
+            } else {
+                btnEdit.style.display = 'none';
+                btnEdit.onclick = null;
+            }
+        }
+
         // Header
         document.getElementById('modalPhoto').src = data.foto;
         document.getElementById('modalName').innerText = data.nama;
@@ -382,4 +427,155 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `</div></div>`;
         return html;
     }
+
+    // Handle add generation member
+    window.addGenerationMember = function(generasi) {
+        window.location.href = treeApiUrl.replace('get_family_tree', 'add') + '?generasi=' + generasi;
+    };
+
+    window.switchTab = function(tab) {
+        document.getElementById('tabBesar').style.borderBottomColor = 'transparent';
+        document.getElementById('tabBesar').style.color = '#8fa398';
+        document.getElementById('tabBesar').classList.remove('active-tab');
+        
+        const tabInti = document.getElementById('tabInti');
+        if (tabInti) {
+            tabInti.style.borderBottomColor = 'transparent';
+            tabInti.style.color = '#8fa398';
+            tabInti.classList.remove('active-tab');
+        }
+
+        if (tab === 'besar') {
+            document.getElementById('tabBesar').style.borderBottomColor = 'var(--accent, #d4af37)';
+            document.getElementById('tabBesar').style.color = 'var(--accent, #d4af37)';
+            document.getElementById('tabBesar').classList.add('active-tab');
+            document.getElementById('treeContainer').style.display = 'block';
+            document.getElementById('intiContainer').style.display = 'none';
+        } else {
+            if (tabInti) {
+                tabInti.style.borderBottomColor = 'var(--accent, #d4af37)';
+                tabInti.style.color = 'var(--accent, #d4af37)';
+                tabInti.classList.add('active-tab');
+            }
+            document.getElementById('treeContainer').style.display = 'none';
+            document.getElementById('intiContainer').style.display = 'block';
+            renderKeluargaInti();
+        }
+    };
+
+    function renderKeluargaInti() {
+        const container = document.getElementById('intiCards');
+        if (!container) return;
+        
+        if (!window.currentUserId) {
+            container.innerHTML = '<p style="color: var(--ink-soft); width: 100%; text-align: center;">Silakan login untuk melihat Keluarga Inti.</p>';
+            return;
+        }
+
+        const myMembers = window.allTreeMembers.filter(m => String(m.created_by) === String(window.currentUserId));
+        
+        if (myMembers.length === 0) {
+            container.innerHTML = '<p style="color: var(--ink-soft); width: 100%; text-align: center;">Anda belum menambahkan data kerabat satupun.</p>';
+            return;
+        }
+
+        let html = myMembers.map(m => renderMemberCard(m)).join('');
+        
+        html += `
+            <div class="member-card" style="display: flex; align-items: center; justify-content: center; background: transparent; border: 2px dashed var(--accent, #d4af37); cursor: pointer; min-height: 160px; min-width: 250px; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(212, 175, 55, 0.1)';" onmouseout="this.style.background='transparent';" onclick="window.addGenerationMember('')">
+                <div style="text-align: center; color: var(--accent, #d4af37);">
+                    <i class="bi bi-plus-circle" style="font-size: 2.5rem; margin-bottom: 10px; display: block;"></i>
+                    <span style="font-weight: bold; font-size: 15px;">Tambah Keluarga</span>
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        // Add event listeners to cards
+        container.querySelectorAll('.member-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                if (id) openModal(id);
+            });
+        });
+        
+        container.querySelectorAll('.clickable-profile').forEach(col => {
+            col.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const id = this.getAttribute('data-id');
+                if (id) openModal(id);
+            });
+        });
+    }
+
+    window.closeEditModal = function() {
+        const editModal = document.getElementById('editModal');
+        if (editModal) {
+            editModal.style.display = 'none';
+            editModal.setAttribute('aria-hidden', 'true');
+        }
+    };
+
+    window.openEditModal = function(data) {
+        // Hide infoPopup
+        closeModal();
+        
+        const editModal = document.getElementById('editModal');
+        if (!editModal) return;
+        
+        // Set form action
+        document.getElementById('editForm').action = window.editMemberUrl + '/' + data.id;
+        
+        // Populate fields from data.raw_data
+        const raw = data.raw_data;
+        if (raw) {
+            document.getElementById('editFullName').value = raw.full_name || '';
+            document.getElementById('editGender').value = raw.gender || 'L';
+            document.getElementById('editGenerasi').value = raw.generasi || '';
+            document.getElementById('editBirthPlace').value = raw.birth_place || '';
+            document.getElementById('editBirthDate').value = raw.birth_date ? raw.birth_date.split(' ')[0] : '';
+            document.getElementById('editIsAlive').value = raw.is_alive == 0 ? '0' : '1';
+            
+            const deathContainer = document.getElementById('editDeathDateContainer');
+            if (raw.is_alive == 0) {
+                deathContainer.style.display = 'block';
+                document.getElementById('editDeathDate').value = raw.death_date ? raw.death_date.split(' ')[0] : '';
+            } else {
+                deathContainer.style.display = 'none';
+                document.getElementById('editDeathDate').value = '';
+            }
+            
+            // Populate Ayah & Ibu dropdowns
+            const fatherSelect = document.getElementById('editFatherId');
+            const motherSelect = document.getElementById('editMotherId');
+            
+            if (fatherSelect && motherSelect && window.allTreeMembers) {
+                let fatherHtml = '<option value="">-- Pilih Ayah --</option>';
+                let motherHtml = '<option value="">-- Pilih Ibu --</option>';
+                
+                window.allTreeMembers.forEach(m => {
+                    if (m.id == data.id) return; // Cannot be parent of self
+                    if (m.gender === 'L') {
+                        const sel = (raw.father_id == m.id) ? 'selected' : '';
+                        fatherHtml += `<option value="${m.id}" ${sel}>${m.nama} (Gen ${m.generasi || '?'})</option>`;
+                    } else if (m.gender === 'P') {
+                        const sel = (raw.mother_id == m.id) ? 'selected' : '';
+                        motherHtml += `<option value="${m.id}" ${sel}>${m.nama} (Gen ${m.generasi || '?'})</option>`;
+                    }
+                });
+                
+                fatherSelect.innerHTML = fatherHtml;
+                motherSelect.innerHTML = motherHtml;
+            }
+            
+            document.getElementById('editPhone').value = raw.phone || '';
+            document.getElementById('editEmail').value = raw.email || '';
+            document.getElementById('editOccupation').value = raw.occupation || '';
+            document.getElementById('editAddress').value = raw.address || '';
+        }
+        
+        editModal.style.display = 'flex';
+        editModal.removeAttribute('aria-hidden');
+    };
 });
