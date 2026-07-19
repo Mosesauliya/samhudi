@@ -16,11 +16,6 @@ function showRelationError(elementId, msg) {
 
 // Step Navigation
 function nextStep(stepIndex) {
-    if (stepIndex === 3 && selectedRole === 'anak') {
-        if (currentStep === 2) stepIndex = 4;
-        else if (currentStep === 4) stepIndex = 2;
-    }
-
     if (stepIndex === 1) {
         document.getElementById('wizardHeader').style.display = 'flex';
     }
@@ -54,12 +49,16 @@ function nextStep(stepIndex) {
     // Update step indicator
     if (stepIndex > 0) {
         document.querySelector('.step-num').innerText = stepIndex;
+        
         // Update leaves
         for (let i = 1; i <= 4; i++) {
             const leaf = document.getElementById('leaf' + i);
             if (leaf) {
-                if (i <= stepIndex) leaf.classList.add('active');
-                else leaf.classList.remove('active');
+                if (i <= stepIndex) {
+                    leaf.classList.add('active');
+                } else {
+                    leaf.classList.remove('active');
+                }
             }
         }
     }

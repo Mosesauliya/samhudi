@@ -14,6 +14,9 @@
         <p class="silsilah-subtitle">Keluarga adalah tempat dimana hidup dimulai dan cinta tidak pernah berakhir.</p>
         
         <div class="silsilah-actions">
+            <?php if ($this->session->userdata('logged_in')): ?>
+            <button class="btn-tambah-anggota" onclick="window.location.href='<?php echo base_url('familytree/add'); ?>'"><i class="bi bi-person-plus"></i> Tambah Anggota</button>
+            <?php endif; ?>
             <div class="silsilah-search-box">
                 <i class="bi bi-search"></i>
                 <input type="text" placeholder="Cari anggota...">
@@ -22,18 +25,12 @@
     </div>
     
     <div class="silsilah-main-tabs" style="display: flex; gap: 20px; border-bottom: 2px solid rgba(77,107,103,0.3); margin-bottom: 30px;">
-        <button id="tabKeluargaBesar" class="main-tab-btn active" style="padding: 10px 20px; color: #fff; font-weight: 600; border-bottom: 2px solid #D8B45B; background: transparent; cursor: pointer; transition: 0.3s; margin-bottom: -2px;">Keluarga Besar</button>
+        <button id="tabKeluargaBesar" class="main-tab-btn active" style="padding: 10px 20px; color: var(--forest-deep); font-weight: 600; border-bottom: 2px solid #D8B45B; background: transparent; cursor: pointer; transition: 0.3s; margin-bottom: -2px;">Keluarga Besar</button>
         <?php if ($this->session->userdata('logged_in')): ?>
-        <button id="tabKeluargaKecil" class="main-tab-btn" style="padding: 10px 20px; color: rgba(255,255,255,0.6); font-weight: 600; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; transition: 0.3s; margin-bottom: -2px;">Keluarga Kecil</button>
+        <button id="tabKeluargaKecil" class="main-tab-btn" style="padding: 10px 20px; color: var(--ink-soft); font-weight: 600; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; transition: 0.3s; margin-bottom: -2px;">Keluarga Kecil</button>
         <?php endif; ?>
     </div>
 
-    <div class="silsilah-tabs" style="display: flex; gap: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 30px; padding: 0 20px;">
-        <button id="tabBesar" onclick="switchTab('besar')" style="padding: 15px 0; background: none; border: none; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; color: var(--accent, #d4af37); border-bottom: 3px solid var(--accent, #d4af37); cursor: pointer; transition: 0.3s;">Keluarga Besar</button>
-        <?php if ($this->session->userdata('logged_in')): ?>
-        <button id="tabInti" onclick="switchTab('inti')" style="padding: 15px 0; background: none; border: none; font-family: 'Manrope', sans-serif; font-weight: 500; font-size: 16px; color: #8fa398; border-bottom: 3px solid transparent; cursor: pointer; transition: 0.3s;" onmouseover="this.style.color='var(--accent, #d4af37)'" onmouseout="if(!this.classList.contains('active-tab')) this.style.color='#8fa398'">Keluarga Inti</button>
-        <?php endif; ?>
-    </div>
 
     <!-- Container for the generation rows -->
     <div id="treeContainer" class="tree-container">
@@ -41,10 +38,6 @@
         <div class="loading-state">Memuat data silsilah...</div>
     </div>
     
-    <!-- Container for Keluarga Inti -->
-    <div id="intiContainer" style="display: none; padding: 20px;">
-        <div class="generation-cards" id="intiCards" style="flex-wrap: wrap; justify-content: flex-start; gap: 20px;"></div>
-    </div>
 </div>
 
 <!-- Modal Pop-up -->
@@ -105,78 +98,7 @@
         cursor: pointer;
     }
 </style>
-<div class="silsilah-modal" id="editPopup" aria-hidden="true" style="z-index: 1050;">
-    <div class="silsilah-modal-content" style="max-height: 90vh; display: flex; flex-direction: column;">
-        <button class="modal-close" id="editPopupClose" aria-label="Tutup"><i class="bi bi-x-lg"></i></button>
-        
-        <div class="modal-header" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding: 20px 24px; flex-shrink: 0;">
-            <h2 style="color: #fff; font-size: 18px; margin: 0;"><i class="bi bi-pencil-square" style="color: #D8B45B;"></i> Edit Data Profil</h2>
-        </div>
 
-        <div style="overflow-y: auto; padding: 24px;">
-            <form id="inlineEditForm" enctype="multipart/form-data">
-                <input type="hidden" name="id" id="edit_id">
-                
-                <div style="margin-bottom: 15px;">
-                    <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Nama Lengkap</label>
-                    <input type="text" name="full_name" id="edit_full_name" required style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px;">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <div>
-                        <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Jenis Kelamin</label>
-                        <select name="gender" id="edit_gender" required style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px; appearance: none;">
-                            <option value="L">Laki-laki</option>
-                            <option value="P">Perempuan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Tanggal Lahir</label>
-                        <input type="date" name="birth_date" id="edit_birth_date" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px; color-scheme: dark;">
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Tempat Lahir</label>
-                    <input type="text" name="birth_place" id="edit_birth_place" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px;">
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Pekerjaan</label>
-                    <input type="text" name="occupation" id="edit_occupation" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px;">
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Alamat Domisili</label>
-                    <textarea name="address" id="edit_address" rows="3" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px;"></textarea>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-                    <div>
-                        <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">No. HP</label>
-                        <input type="text" name="phone" id="edit_phone" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px;">
-                    </div>
-                    <div>
-                        <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Email</label>
-                        <input type="email" name="email" id="edit_email" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 14px;">
-                    </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label style="color: #D8B45B; font-size: 12px; display: block; margin-bottom: 5px; font-weight: 600;">Ubah Foto (Biarkan kosong jika tidak ingin diubah)</label>
-                    <input type="file" name="photo" id="edit_photo" accept="image/*" style="width: 100%; background: #1A2824; border: 1px solid rgba(77,107,103,0.3); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 12px;">
-                </div>
-
-                <div id="editAlert" style="display: none; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 14px;"></div>
-            </form>
-        </div>
-
-        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding: 15px 24px; flex-shrink: 0; background: var(--member-card-bg); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-            <button type="button" class="btn-tutup-modal" id="btnBatalEdit" style="margin: 0; padding: 8px 20px;">Batal</button>
-            <button type="submit" form="inlineEditForm" id="btnSimpanEdit" style="background: #D8B45B; color: #15201E; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(216,180,91,0.2);">Simpan</button>
-        </div>
-    </div>
-</div>
         </div>
     </div>
 </div>
@@ -235,6 +157,13 @@
                     <select name="mother_id" id="editMotherId" style="width: 100%; padding: 10px; border-radius: 8px; background: #1d2a27; border: 1px solid #324742; color: white;">
                         <option value="">-- Pilih Ibu --</option>
                     </select>
+                </div>
+                <div>
+                    <label style="color: #8fa398; font-size: 14px; margin-bottom: 5px; display: block;">Pasangan (Pilih jika ada)</label>
+                    <div id="editSpousesContainer" style="background: rgba(0,0,0,0.2); border: 1px solid #324742; border-radius: 8px; padding: 10px; max-height: 120px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Spouses checkboxes will be generated by JS -->
+                        <div style="color: #6a8077; font-size: 13px; font-style: italic;">Memuat daftar pasangan...</div>
+                    </div>
                 </div>
                 <div>
                     <label style="color: #8fa398; font-size: 14px; margin-bottom: 5px; display: block;">No. Telepon</label>

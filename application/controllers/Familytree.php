@@ -391,6 +391,9 @@ class Familytree extends CI_Controller
             return;
         }
         
+        $this->load->model('Silsilah_model');
+        $member['spouses'] = $this->Silsilah_model->get_spouses_by_member_id($id);
+        
         echo json_encode($member);
     }
 
@@ -440,6 +443,11 @@ class Familytree extends CI_Controller
             'address'     => $this->input->post('address'),
             'phone'       => $this->input->post('phone'),
             'email'       => $this->input->post('email'),
+            'generasi'    => $this->input->post('generasi') ? $this->input->post('generasi') : null,
+            'father_id'   => $this->input->post('father_id') ? $this->input->post('father_id') : null,
+            'mother_id'   => $this->input->post('mother_id') ? $this->input->post('mother_id') : null,
+            'is_alive'    => $this->input->post('is_alive') ?? 1,
+            'death_date'  => $this->input->post('is_alive') == 1 ? null : ($this->input->post('death_date') ? $this->input->post('death_date') : null),
         ];
 
         // Handle photo upload if exists
@@ -464,9 +472,17 @@ class Familytree extends CI_Controller
 
         $this->db->where('id', $id);
         if ($this->db->update('family_members', $update_data)) {
+            // Update spouses
+            $spouses = $this->input->post('spouses') ?? [];
+            if (!is_array($spouses)) {
+                $spouses = explode(',', $spouses);
+            }
+            $this->load->model('Silsilah_model');
+            $this->Silsilah_model->sync_marriages($id, $update_data['gender'], $spouses);
+
             echo json_encode(['status' => true, 'message' => 'Data berhasil diperbarui.']);
         } else {
-            echo json_encode(['status' => false, 'message' => 'Terjadi kesalahan sistem saat menyimpan.']);
+            echo json_encode(['status' => false, 'message' => 'Gagal memperbarui data.']);
         }
     }
 }

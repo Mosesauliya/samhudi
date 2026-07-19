@@ -270,8 +270,6 @@
                 <input type="hidden" id="selectedParentId">
             </div>
         </div>
-            </div>
-        </div>
 
         <p style="color: #6a7b73; font-size: 13px; margin-bottom: 8px;">Pilih Jenis Kelamin:</p>
         <div style="display: flex; gap: 15px; margin-bottom: 25px;">
